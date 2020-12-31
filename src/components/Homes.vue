@@ -49,7 +49,7 @@
           if (res.status == "200") {
             this.menuList = res.data.data;
           } else {
-            this.$message.error("数据获取失败");
+            this.$message.error("数据获失败");
           }
         })
       },
