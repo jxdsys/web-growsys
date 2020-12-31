@@ -51,7 +51,6 @@
             //提交我们的用户名和密码
            axios.post("/login",this.form).then(res => {
              if (res.data.status=="200"){
-
                  //将用户名存储到sessionStorage中
                  sessionStorage.setItem("name",this.from.name)
                  sessionStorage.setItem("role",res.data.role)
@@ -84,7 +83,6 @@
    height: 705px;
   }
   .loginContainer{
-    /*float: right;*/
     width: 350px;
     height: 260px;
     position:relative;
