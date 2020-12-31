@@ -3,7 +3,7 @@
     <el-container class="home-container">
       <el-header>
         <div>
-          <span>金桥学员成长跟踪系统</span>
+          <span>金桥学员成长跟踪系统{{role}}</span>
         </div>
         <el-button type="info">安全退出</el-button>
       </el-header>
@@ -39,6 +39,7 @@
         menuList: [],
         isCollapse:false,
         activePath:"/welcome"
+          ,role:""
       }
     },
     methods: {
