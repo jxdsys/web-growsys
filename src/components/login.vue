@@ -1,23 +1,25 @@
 <template>
-  <div class="back" style="height: 630px" >
-    <div style="text-align: center;width: 100%;height: 100%">
-      <div class="loginContainer">
-        <p style="font-size: 20px;line-height: 1.7">欢迎登录员工管理系统</p>
-        <el-form ref="loginform" :model="form" :rules="rules" label-width="80px">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="form.name"></el-input>
-
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="form.password"></el-input>
-          </el-form-item>
-          <el-button type="primary" @click="login">提交</el-button>
-        </el-form>
+   <div  class="back"  >
+      <div   style="height: 500px ;width: 65%;float: left;margin-top: 50px">
+        </div>
+         <div style="height: 500px;width: 35%;float: right;margin-top: 50px">
+          <div class="loginContainer">
+            <div style="line-height: 40px">
+              <p style="font-size: 20px;line-height: 1.7">欢迎登录金桥学院成长跟踪系统</p>
+              <el-form ref="loginform" :model="form" :rules="rules" label-width="80px" >
+                <el-form-item label="用户名" prop="name">
+                  <el-input v-model="form.name" style=""></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                  <el-input type="password" v-model="form.password"></el-input>
+                </el-form-item>
+                <el-button type="primary" @click="login" style="width: 140px ">登录</el-button>
+            </el-form>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+   </div>
 </template>
-
 <script>
   import axios from 'axios';
   export default {
@@ -32,12 +34,12 @@
         rules: {
           name: [
             {required: true, message: '请输入用户名', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+            {min: 3, max: 6, message: '长度在 3 到 6个字符', trigger: 'blur'}
           ],
           password:[
             {required: true, message: '请输入密码', trigger: 'blur'},
+            {min: 6, max: 15, message: '长度在 6到 15 个字符', trigger: 'blur'}
           ]
-
         }
       }
     },
@@ -48,9 +50,14 @@
           if (valid) {
             //提交我们的用户名和密码
            axios.post("/login",this.form).then(res => {
-             if (res.data=="success"){
-               //跳转页面
-               this.$router.push({path:'/Homes'});
+             if (res.data.status=="200"){
+
+                 //将用户名存储到sessionStorage中
+                 sessionStorage.setItem("name",this.from.name)
+                 sessionStorage.setItem("role",res.data.role)
+                 //跳转页面
+                this.$router.push({path:'/Homes'});
+
              } else {
                this.$message({
                  message:"用户名或者密码错误",
@@ -73,13 +80,16 @@
 
 <style scoped>
   .back{
-    background:url(../assets/grryg.jpg) repeat center center;
+    background:url(../assets/3.1.jpg  );
+   height: 705px;
   }
   .loginContainer{
+    /*float: right;*/
     width: 350px;
+    height: 260px;
     position:relative;
-    left: 35%;
-    top: 160px;
+    left: 3%;
+    top: 140px;
     background-color: aliceblue;
     padding: 10px 30px 20px 10px
   }
