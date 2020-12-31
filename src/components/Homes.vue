@@ -43,7 +43,7 @@
     },
     methods: {
       getMenuList: function () {
-        axios.get("/getAllMenu").then(res => {
+        axios.get("/getMenu").then(res => {
           if (res.data.status == "200") {
             this.menuList = res.data.data;
           } else {
