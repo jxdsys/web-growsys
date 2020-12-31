@@ -38,7 +38,7 @@
           ],
           password:[
             {required: true, message: '请输入密码', trigger: 'blur'},
-            {min: 6, max: 15, message: '长度在 6到 15 个字符', trigger: 'blur'}
+            {min: 3, max: 15, message: '长度在 6到 15 个字符', trigger: 'blur'}
           ]
         }
       }
@@ -50,11 +50,12 @@
           if (valid) {
             //提交我们的用户名和密码
            axios.post("/login",this.form).then(res => {
-             if (res.data.status=="200"){
+             if (res.status=="200"){
 
                  //将用户名存储到sessionStorage中
-                 sessionStorage.setItem("name",this.from.name)
-                 sessionStorage.setItem("role",res.data.role)
+                // sessionStorage.setItem("name",this.from.name)
+                 sessionStorage.setItem("role",res.data.data.role)
+                 // alert(res.data.data.role)
                  //跳转页面
                 this.$router.push({path:'/Homes'});
 

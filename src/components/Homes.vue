@@ -38,13 +38,15 @@
       return {
         menuList: [],
         isCollapse:false,
-        activePath:"/welcome"
+        activePath:"/welcome",
+        role:sessionStorage.getItem("role")
+
       }
     },
     methods: {
       getMenuList: function () {
-        axios.get("/getMenu").then(res => {
-          if (res.data.status == "200") {
+        axios.post("/getMenu",this.role).then(res => {
+          if (res.status == "200") {
             this.menuList = res.data.data;
           } else {
             this.$message.error("数据获取失败");
