@@ -45,6 +45,7 @@
     },
     methods: {
       getMenuList: function () {
+          alert(this.role)
         axios.post("/getMenu",this.role).then(res => {
           if (res.status == "200") {
             this.menuList = res.data.data;
