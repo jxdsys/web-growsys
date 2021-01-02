@@ -13,11 +13,12 @@
           <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff"
                    unique-opened :router="true" :collapse="isCollapse" :collapse-transition="false"
           :default-active="activePath">
-              <el-submenu  :index="menu.id+''" v-for="menu in menuList" :key="menu.id">
+              <el-menu-item :index="menu.path" v-for="menu in menuList" :key="menu.id"
+                           @click="saveNavState(menu.path)">
                 <template slot="title">
                   <span>{{menu.title}}</span>
                 </template>
-              </el-submenu >
+              </el-menu-item >
           </el-menu>
         </el-aside>
         <el-main>
@@ -28,10 +29,8 @@
     </el-container>
   </div>
 </template>
-
 <script>
   import axios from 'axios'
-
   export default {
     name: "Homes",
     data() {
@@ -40,12 +39,11 @@
         isCollapse:false,
         activePath:"/welcome",
         role:sessionStorage.getItem("role")
-
       }
     },
     methods: {
       getMenuList: function () {
-          alert(this.role)
+          // alert(this.role)
         axios.post("/getMenu",this.role).then(res => {
           if (res.status == "200") {
             this.menuList = res.data.data;
@@ -54,21 +52,22 @@
           }
         })
       },
-
+      saveNavState:function (activePath) {
+           this.activePath = activePath;
+           sessionStorage.setItem('activePath',this.activePath)
+        },
     },
+
     created() {
       this.getMenuList();
       this.activePath = sessionStorage.getItem("activePath")
     }
-
   }
 </script>
-
 <style scoped>
   .home-container {
     height: 630px;
   }
-
   .el-header {
     background-color: #373d41;
     background-color: #373d41;

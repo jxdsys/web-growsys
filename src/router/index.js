@@ -4,7 +4,7 @@ import login from '@/components/login'
 
 import Homes from '@/components/Homes'
 import welcome from '@/components/welcome'
-
+import DeptAppra from '@/components/DeptAppra'
 
 Vue.use(Router)
 
@@ -20,10 +20,10 @@ export default new Router({
       name:'Homes',
       component:Homes,
       redirect:"/welcome",
+
       children:[
         {path:'/welcome',component:welcome},
-
-
+        {path:'/deptinfo',component: DeptAppra}
       ]
     },
 
