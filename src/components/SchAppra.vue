@@ -17,9 +17,9 @@
 
         <!--  新增和编辑的对话框      -->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-          <el-form :model="form" :rules="rules" label-position="right" ref="empform">
-            <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="ename">
-              <el-input v-model="form.sname" autocomplete="off" style="width: 350px"></el-input>
+          <el-form :model="form" :rules="rules" label-position="right" ref="schform">
+            <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="schAppraName">
+              <el-input v-model="form.schAppraName" autocomplete="off" style="width: 350px"></el-input>
             </el-form-item>
             <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
               <el-select v-model="form.sex" placeholder="请选择" style="width: 350px">
@@ -39,11 +39,6 @@
               >
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptid">
-              <el-select v-model="form.deptid" placeholder="请选择所属部门" style="width: 350px">
-                <el-option v-for="dept in this.deptList" :value="dept.deptid" :label="dept.dname"></el-option>
-              </el-select>
-            </el-form-item>
           </el-form>
 
           <div slot="footer" class="dialog-footer">
@@ -61,6 +56,7 @@
           height="360px"
           style="width: 100%"
           @selection-change="handleSelectionChange">
+
           <el-table-column
             type="selection"
             width="75" align="center">
@@ -70,6 +66,11 @@
             type="index"
             width="80" align="center">
           </el-table-column>
+          <!--          <el-table-column-->
+          <!--            prop="sch_appra_id"-->
+          <!--            label="编号"-->
+          <!--            width="240" align="center">-->
+          <!--          </el-table-column>-->
           <el-table-column
             prop="sch_appra_name"
             label="姓名"
@@ -85,7 +86,7 @@
             label="入职日期" align="center">
           </el-table-column>
           <el-table-column
-            prop="flag"
+            prop="state"
             label="状态" align="center">
           </el-table-column>
           <el-table-column
@@ -94,6 +95,7 @@
             width="100" header-align="center">
             <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -123,7 +125,7 @@
     name: "SchAppra",
     data() {
       return {
-        sname:"",//存储用户名
+        sname: "",//存储用户名
 
         //表格分页查询等相关数据
         tableData: [],
@@ -146,10 +148,11 @@
         dialogFormVisible: false,
         //定义表单数据
         form: {
-          sch_appra_name: "",
+          schAppraId: "",
+          schAppraName: "",
           sex: "",
-          term_name: "",
-          flag: ""
+          hiredate: "",
+          state: ""
         },
         formLabelWidth: "150px",
         deptList: [],
@@ -197,6 +200,7 @@
         //当前页码发生变化时，触发该事件
         //获取当前页码赋值给this.listQuery.page,然后调用getEmps方法
         //val代表当前页码
+
         this.listQuery.page = val;
         this.getEmps();
       },
@@ -208,9 +212,9 @@
         this.dialogFormVisible = false
       },
       addEmp: function () {
-        this.$refs["empform"].validate((valid) => {
+        this.$refs["schform"].validate((valid) => {
           if (valid) {
-            axios.post("/addEmp", this.form).then(res => {
+            axios.post("/addSch", this.form).then(res => {
               if (res.data == "success") {
                 this.form = {};
                 this.dialogFormVisible = false;
@@ -233,26 +237,43 @@
         })
 
       },
-      //获取全部的部门信息
-      getDepts: function () {
-        axios.get("/getDepts").then(res => {
-          this.deptList = res.data;
-        })
-      },
       showAdd: function () {
         // this.getDepts();
         this.form = {};
-        this.dialogTitle = "新增员工";
+        this.dialogTitle = "新增";
         this.dialogFormVisible = true;
       },
       handleEdit: function (rowData) {
         this.form = {};
-        this.dialogTitle = "编辑员工";
+        this.dialogTitle = "编辑";
         //根据员工编号获取员工详细信息，展示到对话框
-        axios.get("/getEmpById/" + rowData.empno).then(res => {
+        axios.get("/getSchById/" + rowData.sch_appra_id).then(res => {
 
           this.form = res.data
           this.dialogFormVisible = true;
+        })
+      },
+      handleDelete: function (rowData) {
+        this.$confirm('确认删除所选记录吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {//确定
+          axios.get("/delSch/" + rowData.sch_appra_id).then(res => {
+            if (res.data == "success") {
+              this.getEmps();
+              this.page.currentPage = 1;//删除后默认显示第一页
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            } else {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+            }
+          })
         })
       },
 
@@ -276,9 +297,13 @@
         }).then(() => {//确定
           var arrEmpnos = [];
           for (var i = 0; i < this.checkData.length; i++) {
-            arrEmpnos[i] = this.checkData[i].empno;
+            if (this.checkData[i].state == "忙碌") {
+              alert("含授课中的教师，无法删除");
+              return;
+            }
+            arrEmpnos[i] = this.checkData[i].sch_appra_id;
           }
-          axios.post("/delBatchEmp", arrEmpnos).then(res => {
+          axios.post("/delBatchSch", arrEmpnos).then(res => {
             if (res.data == "success") {
               this.getEmps();
               this.page.currentPage = 1;//删除后默认显示第一页
@@ -309,7 +334,6 @@
     mounted() {
       //查询数据
       this.getEmps();
-      this.getDepts();
       //从sessionStorage中获取用户名
       this.uname = sessionStorage.getItem("uname");
     },

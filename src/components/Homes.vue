@@ -13,11 +13,11 @@
           <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff"
                    unique-opened :router="true" :collapse="isCollapse" :collapse-transition="false"
           :default-active="activePath">
-              <el-submenu  :index="menu.id+''" v-for="menu in menuList" :key="menu.id">
+              <el-menu-item  :index="menu.path" v-for="menu in menuList" :key="menu.id" @click="saveNavState(menu.path)">
                 <template slot="title">
                   <span>{{menu.title}}</span>
                 </template>
-              </el-submenu >
+              </el-menu-item >
           </el-menu>
         </el-aside>
         <el-main>
@@ -38,7 +38,7 @@
       return {
         menuList: [],
         isCollapse:false,
-        activePath:"/welcome",
+        activePath:"/SchAppra",
         role:sessionStorage.getItem("role")
 
       }
@@ -54,6 +54,10 @@
           }
         })
       },
+      saveNavState:function (activePath) {
+        this.activePath = activePath;
+        sessionStorage.setItem('activePath',this.activePath)
+      }
 
     },
     created() {
