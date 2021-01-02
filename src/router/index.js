@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import login from '@/components/login'
 
 import Homes from '@/components/Homes'
-import welcome from '@/components/welcome'
+import SchAppra from '@/components/SchAppra'
 
 
 Vue.use(Router)
@@ -19,9 +19,9 @@ export default new Router({
       path:'/Homes',
       name:'Homes',
       component:Homes,
-      redirect:"/welcome",
+      redirect:"/SchAppra",
       children:[
-        {path:'/welcome',component:welcome},
+        {path:'/SchAppra',component:SchAppra},
 
 
       ]
