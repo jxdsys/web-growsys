@@ -7,17 +7,39 @@
         <el-button type="primary" @click="querys">查询</el-button>
        </div>
        <div align="right" style="float: right">
-        <el-button type="primary" >新增</el-button>
-        <el-button type="primary" >删除</el-button>
+        <el-button type="primary" @click="selectAdd" >新增</el-button>
+        <el-button type="primary" @click="delBatch">删除</el-button>
        </div>
-       <div style="margin-top: 65px">
+       <div style="margin-top: 65px ">
+         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+           <el-form :model="form"  :rules="rules" ref="dept_appra_form">
+
+             <el-form-item label="部门评价人姓名" :label-width="formLabelWidth" prop="deptAppraAame">
+               <el-input v-model="form.deptAppraAame" autocomplete="off" style="width: 400px"></el-input>
+             </el-form-item>
+
+             <el-form-item label="职务" :label-width="formLabelWidth" prop="jobid">
+               <el-select v-model="form.jobid" placeholder="请选择职务" style="width: 400px">
+                 <el-option v-for="job in this.jobList" :value="job.jobid" :label="job.job"></el-option>
+               </el-select>
+             </el-form-item>
+
+             <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptno">
+               <el-select v-model="form.deptno" placeholder="请选择部门" style="width: 400px">
+                 <el-option v-for="dept in this.deptList" :value="dept.deptno" :label="dept.dname"></el-option>
+               </el-select>
+             </el-form-item>
+
+           </el-form>
+           <div slot="footer" class="dialog-footer" align="center">
+             <el-button @click="closeDlog">取 消</el-button>
+             <el-button type="primary" @click="addOrUpdate">确 定</el-button>
+           </div>
+         </el-dialog>
         <el-table
-          :data="tableData"
           border
-          strpe
+          :data="tableData"
           height="460px"
-          :row-style="{height:'52px'}"
-          :cell-style="{padding:'5px 0'}"
           @selection-change="handleSelectionChange">
           <el-table-column
             type="selection"
@@ -52,8 +74,8 @@
             width="200"
             align="center">
             <template slot-scope="scope">
-              <el-button type="text"  >编辑</el-button>
-              <el-button type="text"  >删除</el-button>
+              <el-button type="text"  @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button type="text"  @click="del(scope.row)" >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -91,10 +113,38 @@
                 total:0
                 //总页数
                 ,pageCount:0
+                //被选中评价人信息
                 ,checkData:[]
+                //表单名字
+                ,dialogTitle:""
+                //控制对话框的显示和影藏
+                ,dialogFormVisible:false,
+                isadd :false
+                //定义表单数据
+                ,form:{
+                    deptAppraAame:"",
+                    jobid:"",
+                    deptno:""
+                },
+                //文本显示宽度
+                formLabelWidth:"120px",
+                deptList:[],
+                jobList:[],
+                rules:{
+                    dept_appra_name:[
+                        {required: true, message: '请输入评价人姓名', trigger: 'blur'}
+                    ] ,
+                    jobid:[
+                        {required: true, message: '请选择职务', trigger: 'blur'}
+                    ],
+                    daptno:[
+                        {required: true, message: '请选择部门', trigger: 'blur'}
+                    ]
+                }
             }
         },
         methods:{
+            //查询所有信息
             getDeptAppra:function () {
                 axios.post("/getDeptAppra",this.listQuery).then(res =>{
                     //返回的是对象数组
@@ -102,6 +152,7 @@
                     this.total = res.data.total;
                 })
             },
+            //分页查询
             handleSizeChange:function (val) {
                 //每页显示条数是触发该事件
                 //需要根据当前参数重新去后台查询数据
@@ -113,6 +164,7 @@
                 this.page.currentPage=1
                 this.getDeptAppra();
             },
+            //页码变化时
             handleCurrentChange:function (val) {
                 //当前页码发生变化时触发
                 //需要重新查询
@@ -130,15 +182,144 @@
                 this.listQuery.page=1;
                 this.getDeptAppra();
             },
+            //获取部门信息
             getDept:function(){
                 axios.get("/getDept").then(res =>{
                     this.deptList=res.data
                 })
             },
+            //获取职务信息
+            getJob:function(){
+                axios.get("/getJob").then(res =>{
+                    this.jobList=res.data
+                })
+            },
+            //打开新增页面
+            selectAdd:function () {
+                this.isadd =true
+                this.dialogTitle ="新增部门评价人";
+                this.form={};
+                this.dialogFormVisible =true;
+                //this.$refs.dept_appra_form.clearValidate()
+            },
+            //打开修改页面
+            handleEdit:function (rowData) {
+                this.dialogTitle="编辑部门评价人";
+                this.isadd = false;
+                //根据员工编号获取信息
+                axios.get("/getDeptAppraById/"+rowData.dept_appraid).then(res =>{
+                    this.form = res.data;
+                });
+                this.dialogFormVisible=true;
+            },
+            //保存数据
+            addOrUpdate:function () {
+                this.$refs["dept_appra_form"].validate((valid) => {
+                    if(valid){
+                        axios.post("/addDeptAppra",this.form).then(res =>{
+                            if(res.data=="success"){
+                                this.form={};
+                                this.dialogFormVisible=false;
+                                this.getDeptAppra()
+                                if(this.isadd){
+                                    this.$message({message:"新增成功", type:"success"})
+                                }else{
+                                    this.$message({message:"修改成功", type:"success"})
+                                }
+
+                            }else{
+                                this.form={};
+                                this.dialogFormVisible=false;
+                                this.getDeptAppra()
+                                if(this.isadd){
+                                    this.$message({message:"新增失败", type:"error"})
+                                }else{
+                                    this.$message({message:"修改失败", type:"error"})
+                                }
+                            }
+                        })
+                    }
+                })
+            },
+            //关闭页面
+            closeDlog:function () {
+                //清空数据
+                this.form ={};
+                //关闭对话框
+                this.dialogFormVisible =false
+            },
+            //批量
+            delBatch:function(){
+                if (this.checkData.length == 0){
+                    this.$message({message:"请选中要删除的记录",type:"warning"})
+                    return
+                }
+                this.$confirm('此操作将永久删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {//确定
+                    var arrDeptAppraids=[];
+                    for (var i=0;i<this.checkData.length;i++){
+                        arrDeptAppraids[i]=this.checkData[i].dept_appraid;
+                    }
+                    axios.post("/delDeptAppra",arrDeptAppraids).then(res =>{
+                        if(res.data =="success"){
+                            this.getDeptAppra()
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '删除失败!'
+                            });
+                        }
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                })
+            },
+            //单条删除
+            del:function (rowData) {
+                this.$confirm('此操作将永久删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {//确定
+                    //rowData.dept_appraid
+                    var arrDeptAppraids = [];
+                    arrDeptAppraids[0] = rowData.dept_appraid;
+                    // for (var i = 0; i < this.checkData.length; i++) {
+                    //     arrDeptAppraids[i] = this.checkData[i].dept_appraid;
+                    // }
+                    axios.post("/delDeptAppra", arrDeptAppraids).then(res => {
+                        if (res.data == "success") {
+                            this.getDeptAppra()
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: '删除失败!'
+                            });
+                        }
+                    })
+                })
+            }
         },
         mounted(){
             //获取数据
             this.getDeptAppra()
+            this.getDept();
+            this.getJob();
         }
     }
 </script>
