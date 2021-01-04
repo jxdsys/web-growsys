@@ -10,39 +10,31 @@
         </div>
 
         <div align="right">
-          <el-button type="primary" @click="showAdd">新增</el-button>
-          <el-button type="primary" @click="delBatch">删除</el-button>
+          <el-button type="primary" @click="showAdd">新增班期</el-button>
         </div>
 
 
         <!--  新增和编辑的对话框      -->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
           <el-form :model="form" :rules="rules" label-position="right" ref="schform">
-            <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="schAppraName">
-              <el-input v-model="form.schAppraName" autocomplete="off" style="width: 350px"></el-input>
+            <el-form-item label="班期" :label-width="formLabelWidth" prop="termName">
+              <el-input v-model="form.termName" autocomplete="off" style="width: 350px"></el-input>
             </el-form-item>
-            <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-                <el-radio label="男" value="男" v-model="form.sex"></el-radio>
-                <el-radio label="女" value="女" v-model="form.sex"></el-radio>
+            <el-form-item label="班期状态" :label-width="formLabelWidth" prop="flag">
+              <el-input v-model="form.flag" autocomplete="off" style="width: 350px"></el-input>
             </el-form-item>
-            <el-form-item label="入职日期" :label-width="formLabelWidth" prop="hiredate">
-              <el-date-picker
-                v-model="form.hiredate"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
-                align="right"
-                type="date"
-                placeholder="选择日期"
-                style="width: 350px"
-              >
-              </el-date-picker>
+
+            <el-form-item label="任课老师" :label-width="formLabelWidth" prop="sch_appra_id">
+              <el-select v-model="form.schAppraId" placeholder="请选择任课老师" style="width: 350px">
+                <el-option v-for="schoolappra in this.schoolappraList" :value="schoolappra.schAppraId" :label="schoolappra.schAppraName"></el-option>
+              </el-select>
             </el-form-item>
+
           </el-form>
 
           <div slot="footer" class="dialog-footer">
             <el-button @click="closeDlog">取 消</el-button>
-            <el-button type="primary" @click="addEmp">确定</el-button>
-            <!--            <el-button type="primary" @click="editEmp">确定修改</el-button>-->
+            <el-button type="primary" @click="addAppra">确定</el-button>
           </div>
         </el-dialog>
 
@@ -55,45 +47,36 @@
           style="width: 100%"
           @selection-change="handleSelectionChange">
 
-          <el-table-column
-            type="selection"
-            width="75" align="center">
-          </el-table-column>
+
           <el-table-column
             label="序号"
             type="index"
             width="80" align="center">
           </el-table-column>
-          <!--          <el-table-column-->
-          <!--            prop="sch_appra_id"-->
-          <!--            label="编号"-->
-          <!--            width="240" align="center">-->
-          <!--          </el-table-column>-->
+          <el-table-column
+            prop="term_name"
+            label="班期"
+            width="240" align="center">
+          </el-table-column>
           <el-table-column
             prop="sch_appra_name"
-            label="姓名"
+            label="教师姓名"
             width="240" align="center">
           </el-table-column>
           <el-table-column
-            prop="sex"
-            label="性别"
-            width="240" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="hiredate"
-            label="入职日期" align="center">
+            prop="flag"
+            label="班期状态" align="center">
           </el-table-column>
           <el-table-column
             prop="state"
-            label="状态" align="center">
+            label="教师状态" align="center">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
             width="100" header-align="center">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
+              <el-button type="text" @click="distriTeacher(scope.row)">分配教师</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -120,10 +103,11 @@
   import axios from 'axios'
 
   export default {
-    name: "SchAppra",
+    name: "AdminTerm",
     data() {
       return {
         sname: "",//存储用户名
+
         //表格分页查询等相关数据
         tableData: [],
         page: {
@@ -131,7 +115,7 @@
           sizes: [2, 4, 6, 8, 10],
         },
         listQuery: {//初始查询条件
-          limit: 2,
+          limit: 4,
           page: 1,
           filter: ""
         },
@@ -140,29 +124,24 @@
         //总页数
         pageCount: 0,
         //新增或者编辑功能相关数据
-        dialogTitle: "新增员工",
+        dialogTitle: "分配教师",
         //用来控制对话框的显示和隐藏
         dialogFormVisible: false,
         //定义表单数据
         form: {
-          schAppraId: "",
-          schAppraName: "",
-          sex: "",
-          hiredate: "",
-          state: ""
+          termName:"",
+          flag:"",
+          schAppraId:"",
         },
         formLabelWidth: "150px",
         deptList: [],
         rules: {
-          schAppraName: [
+          ename: [
             {required: true, message: '请输入姓名', trigger: 'blur'}
           ],
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
           ],
-          hiredate:[
-            {required: true, message: '请输入入职日期', trigger: 'blur'}
-          ]
         },
         //被选中的员工信息
         checkData: []
@@ -173,9 +152,9 @@
         //这是用于获取全部的员工数据
         // axios.get("/getEmps/"+this.listQuery.limit+"/"+this.listQuery.page).then(res => {
         //参数过多的时，推荐使用post方式传参
-        axios.post("/getEmps", this.listQuery).then(res => {
+        axios.post("/getTerm", this.listQuery).then(res => {
           //res.data返回的是json对象数组
-          this.tableData = res.data.schAppra;
+          this.tableData = res.data.terms;
           this.total = res.data.total;
           //this.page.currentPage=1;//默认显示第一页
         })
@@ -211,10 +190,10 @@
         //关闭对话框
         this.dialogFormVisible = false
       },
-      addEmp: function () {
+      addAppra: function () {
         this.$refs["schform"].validate((valid) => {
           if (valid) {
-            axios.post("/addSch", this.form).then(res => {
+            axios.get("/addAppra/"+this.form.schAppraId+"/"+this.form.termId).then(res => {
               if (res.data == "success") {
                 this.form = {};
                 this.dialogFormVisible = false;
@@ -237,48 +216,42 @@
         })
 
       },
-      showAdd: function () {
-        // this.getDepts();
-        this.form = {};
-        this.dialogTitle = "新增";
-        this.dialogFormVisible = true;
-         this.$refs.schform.clearValidate();
-
-      },
-      handleEdit: function (rowData) {
-
-        this.form = {};
-        this.dialogTitle = "编辑";
-
-        //根据员工编号获取员工详细信息，展示到对话框
-        axios.get("/getSchById/" + rowData.sch_appra_id).then(res => {
-
-          this.form = res.data
-          this.dialogFormVisible = true;
+      getSchAppra: function () {
+        axios.get("/getTeachers").then(res => {
+          this.schoolappraList = res.data;
         })
-        this.$refs.schform.clearValidate();
       },
-      handleDelete: function (rowData) {
-        this.$confirm('确认删除所选记录吗?', '提示', {
+      showAdd: function () {
+        this.$confirm('确认新增班期吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {//确定
-          axios.get("/delSch/" + rowData.sch_appra_id).then(res => {
+          axios.post("/addTerm").then(res => {
             if (res.data == "success") {
               this.getEmps();
               this.page.currentPage = 1;//删除后默认显示第一页
               this.$message({
                 type: 'success',
-                message: '删除成功!'
+                message: '新增班期成功!'
               });
             } else {
               this.$message({
                 type: 'error',
-                message: '删除失败!'
+                message: '新增失败!'
               });
             }
           })
+        })
+      },
+      distriTeacher: function (rowData) {
+        this.getSchAppra();
+        this.form = {};
+        this.dialogTitle = "分配老师";
+        //根据编号获取详细信息，展示到对话框
+        axios.get("/getThisTerm/" + rowData.term_id).then(res => {
+          this.form = res.data
+          this.dialogFormVisible = true;
         })
       },
 
@@ -286,49 +259,6 @@
         //被选中的数据：行对象数组
         this.checkData = val;
 
-      },
-      delBatch: function () {
-        if (this.checkData.length == 0) {
-          this.$message({
-            message: "请选择要删除的记录",
-            type: "warning"
-          });
-          return;
-        }
-        this.$confirm('确认删除所选记录吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {//确定
-          var arrEmpnos = [];
-          for (var i = 0; i < this.checkData.length; i++) {
-            if (this.checkData[i].state == "忙碌") {
-              alert("含授课中的教师，无法删除");
-              return;
-            }
-            arrEmpnos[i] = this.checkData[i].sch_appra_id;
-          }
-          axios.post("/delBatchSch", arrEmpnos).then(res => {
-            if (res.data == "success") {
-              this.getEmps();
-              this.page.currentPage = 1;//删除后默认显示第一页
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            } else {
-              this.$message({
-                type: 'error',
-                message: '删除失败!'
-              });
-            }
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
       },
     },
 
@@ -339,6 +269,7 @@
     mounted() {
       //查询数据
       this.getEmps();
+      this.getSchAppra();
       //从sessionStorage中获取用户名
       this.uname = sessionStorage.getItem("uname");
     },
@@ -382,4 +313,5 @@
     line-height: 320px;
   }
 </style>
+
 

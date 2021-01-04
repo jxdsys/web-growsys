@@ -9,43 +9,6 @@
           <el-button type="primary" @click="querySchAppra">查询</el-button>
         </div>
 
-        <div align="right">
-          <el-button type="primary" @click="showAdd">新增</el-button>
-          <el-button type="primary" @click="delBatch">删除</el-button>
-        </div>
-
-
-        <!--  新增和编辑的对话框      -->
-        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-          <el-form :model="form" :rules="rules" label-position="right" ref="schform">
-            <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="schAppraName">
-              <el-input v-model="form.schAppraName" autocomplete="off" style="width: 350px"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-                <el-radio label="男" value="男" v-model="form.sex"></el-radio>
-                <el-radio label="女" value="女" v-model="form.sex"></el-radio>
-            </el-form-item>
-            <el-form-item label="入职日期" :label-width="formLabelWidth" prop="hiredate">
-              <el-date-picker
-                v-model="form.hiredate"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
-                align="right"
-                type="date"
-                placeholder="选择日期"
-                style="width: 350px"
-              >
-              </el-date-picker>
-            </el-form-item>
-          </el-form>
-
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="closeDlog">取 消</el-button>
-            <el-button type="primary" @click="addEmp">确定</el-button>
-            <!--            <el-button type="primary" @click="editEmp">确定修改</el-button>-->
-          </div>
-        </el-dialog>
-
 
         <el-table
           :data="tableData"
@@ -54,39 +17,74 @@
           height="360px"
           style="width: 100%"
           @selection-change="handleSelectionChange">
+          <el-table-column
+            type="index"
+            label="序号"
+            width="50"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="dname"
+            label="姓名"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="dcrib"
+            label="性别"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="dcrib"
+            label="学校"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="dcrib"
+            label="籍贯"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="培训期间测试成绩"
+            align="center"
+          >
+            <el-table-column
+              prop="province"
+              label="HTML笔试"
+              width="50">
+            </el-table-column>
+            <el-table-column
+              prop="city"
+              label="oracle笔试"
+              width="50">
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="js笔试"
+              width="50">
+            </el-table-column>
+            <el-table-column
+              prop="zip"
+              label="java笔试"
+              width="50">
+            </el-table-column>
+            <el-table-column
+              prop="zip"
+              label="java高级笔试"
+              width="50">
+            </el-table-column>
+            <el-table-column
+              prop="zip"
+              label="L1面试"
+              width="50">
+            </el-table-column>
+          </el-table-column>
 
           <el-table-column
-            type="selection"
-            width="75" align="center">
+            prop="dcrib"
+            label="学校评价"
+            align="center">
           </el-table-column>
-          <el-table-column
-            label="序号"
-            type="index"
-            width="80" align="center">
-          </el-table-column>
-          <!--          <el-table-column-->
-          <!--            prop="sch_appra_id"-->
-          <!--            label="编号"-->
-          <!--            width="240" align="center">-->
-          <!--          </el-table-column>-->
-          <el-table-column
-            prop="sch_appra_name"
-            label="姓名"
-            width="240" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="sex"
-            label="性别"
-            width="240" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="hiredate"
-            label="入职日期" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="state"
-            label="状态" align="center">
-          </el-table-column>
+
           <el-table-column
             fixed="right"
             label="操作"
@@ -242,7 +240,7 @@
         this.form = {};
         this.dialogTitle = "新增";
         this.dialogFormVisible = true;
-         this.$refs.schform.clearValidate();
+        this.$refs.schform.clearValidate();
 
       },
       handleEdit: function (rowData) {

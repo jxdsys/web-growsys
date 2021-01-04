@@ -5,46 +5,9 @@
       <el-main>
 
         <div align="left">
-          <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
+          <el-input v-model="listQuery.filter" placeholder="请输入用户姓名" style="width: 200px"></el-input>
           <el-button type="primary" @click="querySchAppra">查询</el-button>
         </div>
-
-        <div align="right">
-          <el-button type="primary" @click="showAdd">新增</el-button>
-          <el-button type="primary" @click="delBatch">删除</el-button>
-        </div>
-
-
-        <!--  新增和编辑的对话框      -->
-        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-          <el-form :model="form" :rules="rules" label-position="right" ref="schform">
-            <el-form-item label="员工姓名" :label-width="formLabelWidth" prop="schAppraName">
-              <el-input v-model="form.schAppraName" autocomplete="off" style="width: 350px"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-                <el-radio label="男" value="男" v-model="form.sex"></el-radio>
-                <el-radio label="女" value="女" v-model="form.sex"></el-radio>
-            </el-form-item>
-            <el-form-item label="入职日期" :label-width="formLabelWidth" prop="hiredate">
-              <el-date-picker
-                v-model="form.hiredate"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
-                align="right"
-                type="date"
-                placeholder="选择日期"
-                style="width: 350px"
-              >
-              </el-date-picker>
-            </el-form-item>
-          </el-form>
-
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="closeDlog">取 消</el-button>
-            <el-button type="primary" @click="addEmp">确定</el-button>
-            <!--            <el-button type="primary" @click="editEmp">确定修改</el-button>-->
-          </div>
-        </el-dialog>
 
 
         <el-table
@@ -70,30 +33,25 @@
           <!--            width="240" align="center">-->
           <!--          </el-table-column>-->
           <el-table-column
-            prop="sch_appra_name"
+            prop="username"
             label="姓名"
             width="240" align="center">
           </el-table-column>
           <el-table-column
-            prop="sex"
-            label="性别"
+            prop="password"
+            label="密码"
             width="240" align="center">
           </el-table-column>
           <el-table-column
-            prop="hiredate"
-            label="入职日期" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="state"
-            label="状态" align="center">
+            prop="role"
+            label="角色" align="center">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
             width="100" header-align="center">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
+              <el-button type="text" @click="handleDelete(scope.row)">重置密码</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -120,10 +78,11 @@
   import axios from 'axios'
 
   export default {
-    name: "SchAppra",
+    name: "Repwd",
     data() {
       return {
         sname: "",//存储用户名
+
         //表格分页查询等相关数据
         tableData: [],
         page: {
@@ -154,15 +113,12 @@
         formLabelWidth: "150px",
         deptList: [],
         rules: {
-          schAppraName: [
+          ename: [
             {required: true, message: '请输入姓名', trigger: 'blur'}
           ],
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
           ],
-          hiredate:[
-            {required: true, message: '请输入入职日期', trigger: 'blur'}
-          ]
         },
         //被选中的员工信息
         checkData: []
@@ -173,9 +129,9 @@
         //这是用于获取全部的员工数据
         // axios.get("/getEmps/"+this.listQuery.limit+"/"+this.listQuery.page).then(res => {
         //参数过多的时，推荐使用post方式传参
-        axios.post("/getEmps", this.listQuery).then(res => {
+        axios.post("/getUsers", this.listQuery).then(res => {
           //res.data返回的是json对象数组
-          this.tableData = res.data.schAppra;
+          this.tableData = res.data.users;
           this.total = res.data.total;
           //this.page.currentPage=1;//默认显示第一页
         })
@@ -242,40 +198,35 @@
         this.form = {};
         this.dialogTitle = "新增";
         this.dialogFormVisible = true;
-         this.$refs.schform.clearValidate();
-
       },
       handleEdit: function (rowData) {
-
         this.form = {};
         this.dialogTitle = "编辑";
-
         //根据员工编号获取员工详细信息，展示到对话框
         axios.get("/getSchById/" + rowData.sch_appra_id).then(res => {
 
           this.form = res.data
           this.dialogFormVisible = true;
         })
-        this.$refs.schform.clearValidate();
       },
       handleDelete: function (rowData) {
-        this.$confirm('确认删除所选记录吗?', '提示', {
+        this.$confirm('确认重置密码吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {//确定
-          axios.get("/delSch/" + rowData.sch_appra_id).then(res => {
+          axios.get("/repwd/" + rowData.userid).then(res => {
             if (res.data == "success") {
               this.getEmps();
               this.page.currentPage = 1;//删除后默认显示第一页
               this.$message({
                 type: 'success',
-                message: '删除成功!'
+                message: '重置成功!'
               });
             } else {
               this.$message({
                 type: 'error',
-                message: '删除失败!'
+                message: '重置失败!'
               });
             }
           })
@@ -382,4 +333,5 @@
     line-height: 320px;
   }
 </style>
+
 
