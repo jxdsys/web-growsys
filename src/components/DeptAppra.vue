@@ -12,10 +12,10 @@
        </div>
        <div style="margin-top: 65px ">
          <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-           <el-form :model="form"  :rules="rules" ref="dept_appra_form">
+           <el-form :model="form"  :rules="rules" ref="deptAppraForm">
 
-             <el-form-item label="部门评价人姓名" :label-width="formLabelWidth" prop="deptAppraAame">
-               <el-input v-model="form.deptAppraAame" autocomplete="off" style="width: 400px"></el-input>
+             <el-form-item label="部门评价人姓名" :label-width="formLabelWidth" prop="deptAppraName">
+               <el-input v-model="form.deptAppraName" autocomplete="off" style="width: 400px"></el-input>
              </el-form-item>
 
              <el-form-item label="职务" :label-width="formLabelWidth" prop="jobid">
@@ -24,9 +24,9 @@
                </el-select>
              </el-form-item>
 
-             <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptno">
-               <el-select v-model="form.deptno" placeholder="请选择部门" style="width: 400px">
-                 <el-option v-for="dept in this.deptList" :value="dept.deptno" :label="dept.dname"></el-option>
+             <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptid">
+               <el-select v-model="form.deptid" placeholder="请选择部门" style="width: 400px">
+                 <el-option v-for="dept in this.deptList" :value="dept.deptid" :label="dept.dname"></el-option>
                </el-select>
              </el-form-item>
 
@@ -102,7 +102,7 @@
                 tableData:[]
                 ,page:{
                     currentPage:1//当前页码
-                    ,sizes:[2,4,6,8,10]
+                    ,sizes:[4,6,8]
                 },
                 listQuery:{//初始查询条件
                     limit:4,
@@ -122,22 +122,22 @@
                 isadd :false
                 //定义表单数据
                 ,form:{
-                    deptAppraAame:"",
+                    deptAppraName:"",
                     jobid:"",
-                    deptno:""
+                    deptid:""
                 },
                 //文本显示宽度
                 formLabelWidth:"120px",
                 deptList:[],
                 jobList:[],
                 rules:{
-                    dept_appra_name:[
+                    deptAppraName:[
                         {required: true, message: '请输入评价人姓名', trigger: 'blur'}
                     ] ,
-                    jobid:[
+                    deptid:[
                         {required: true, message: '请选择职务', trigger: 'blur'}
                     ],
-                    daptno:[
+                    deptno:[
                         {required: true, message: '请选择部门', trigger: 'blur'}
                     ]
                 }
@@ -200,7 +200,7 @@
                 this.dialogTitle ="新增部门评价人";
                 this.form={};
                 this.dialogFormVisible =true;
-                //this.$refs.dept_appra_form.clearValidate()
+                this.$refs.deptAppraForm.clearValidate();
             },
             //打开修改页面
             handleEdit:function (rowData) {
@@ -211,10 +211,11 @@
                     this.form = res.data;
                 });
                 this.dialogFormVisible=true;
+                this.$refs.deptAppraForm.clearValidate();
             },
             //保存数据
             addOrUpdate:function () {
-                this.$refs["dept_appra_form"].validate((valid) => {
+                this.$refs["deptAppraForm"].validate((valid) => {
                     if(valid){
                         axios.post("/addDeptAppra",this.form).then(res =>{
                             if(res.data=="success"){
@@ -265,7 +266,8 @@
                     }
                     axios.post("/delDeptAppra",arrDeptAppraids).then(res =>{
                         if(res.data =="success"){
-                            this.getDeptAppra()
+                            this.querys()
+                            //this.getDeptAppra()
                             this.$message({
                                 type: 'success',
                                 message: '删除成功!'
@@ -292,15 +294,12 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {//确定
-                    //rowData.dept_appraid
                     var arrDeptAppraids = [];
                     arrDeptAppraids[0] = rowData.dept_appraid;
-                    // for (var i = 0; i < this.checkData.length; i++) {
-                    //     arrDeptAppraids[i] = this.checkData[i].dept_appraid;
-                    // }
                     axios.post("/delDeptAppra", arrDeptAppraids).then(res => {
                         if (res.data == "success") {
-                            this.getDeptAppra()
+                            this.querys()
+                            //this.getDeptAppra()
                             this.$message({
                                 type: 'success',
                                 message: '删除成功!'

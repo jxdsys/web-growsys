@@ -3,9 +3,9 @@
     <el-container class="home-container">
       <el-header>
         <div>
-          <span>金桥学员成长跟踪系统</span>
+          <span>金桥学员成长跟踪系统({{userName}})</span>
         </div>
-        <el-button type="info">安全退出</el-button>
+
       </el-header>
       <el-container>
         <el-aside :width="isCollapse ? '64px' : '200px'">
@@ -36,6 +36,7 @@
     data() {
       return {
         menuList: [],
+        userName:sessionStorage.getItem("userName"),
         isCollapse:false,
         activePath:"/welcome",
         role:sessionStorage.getItem("role")
@@ -53,11 +54,29 @@
         })
       },
       saveNavState:function (activePath) {
-           this.activePath = activePath;
+           // this.activePath = activePath;
+           if(activePath =="/exit"){
+               this.$confirm('是否退出系统?', '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消',
+                   type: 'warning'
+               }).then(() => {//确定
+                   this.$router.push({
+                       path: '/'
+                   });
+               }).catch(() => {
+                   this.$router.go(-1);
+                   this.$message({
+                       type: 'info',
+                       message: '已取消退出'
+                   });
+               })
+           }else{
+               this.activePath = activePath;
+           }
            sessionStorage.setItem('activePath',this.activePath)
-        },
+        }
     },
-
     created() {
       this.getMenuList();
       this.activePath = sessionStorage.getItem("activePath")
