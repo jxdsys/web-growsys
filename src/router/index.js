@@ -4,6 +4,8 @@ import login from '@/components/login'
 
 import Homes from '@/components/Homes'
 import welcome from '@/components/welcome'
+import studentInfo from '@/components//studentInfo'
+import uppwd from '@/components/uppwd'
 
 
 Vue.use(Router)
@@ -19,13 +21,13 @@ export default new Router({
       path:'/Homes',
       name:'Homes',
       component:Homes,
-      redirect:"/welcome",
+      redirect:"/studentInfo",
       children:[
-        {path:'/welcome',component:welcome},
-
-
+        {path:'/studentInfo',component:studentInfo},
+        {path:'/uppwd',component:uppwd}
       ]
     },
+
 
   ]
 })

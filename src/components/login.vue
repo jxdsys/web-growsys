@@ -47,13 +47,17 @@
       login:function () {
         //判断表单验证是否通过然后提交数据到后台
         this.$refs["loginform"].validate((valid) => {
+
           if (valid) {
+
             //提交我们的用户名和密码
            axios.post("/login",this.form).then(res => {
+
              if (res.status=="200"){
 
                  //将用户名存储到sessionStorage中
-                // sessionStorage.setItem("name",this.from.name)
+                sessionStorage.setItem("userName",this.form.name)
+               // alert(this.form.name)
                  sessionStorage.setItem("role",res.data.data.role)
                  // alert(res.data.data.role)
                  //跳转页面
