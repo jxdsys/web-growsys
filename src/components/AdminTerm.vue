@@ -25,7 +25,7 @@
             </el-form-item>
 
             <el-form-item label="任课老师" :label-width="formLabelWidth" prop="sch_appra_id">
-              <el-select v-model="form.schAppraId" placeholder="请选择任课老师" style="width: 350px">
+              <el-select placeholder="请选择任课老师" style="width: 350px">
                 <el-option v-for="schoolappra in this.schoolappraList" :value="schoolappra.schAppraId" :label="schoolappra.schAppraName"></el-option>
               </el-select>
             </el-form-item>
@@ -217,9 +217,9 @@
 
       },
       getSchAppra: function () {
-        axios.get("/getTeachers").then(res => {
-          this.schoolappraList = res.data;
-        })
+          axios.get("/getTeachers").then(res => {
+            this.schoolappraList = res.data;
+          })
       },
       showAdd: function () {
         this.$confirm('确认新增班期吗?', '提示', {
@@ -253,6 +253,7 @@
           this.form = res.data
           this.dialogFormVisible = true;
         })
+
       },
 
       handleSelectionChange: function (val) {
