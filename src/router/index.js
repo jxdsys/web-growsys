@@ -11,6 +11,8 @@ import SchAppra from '@/components/SchAppra'
 import Repwd from '@/components/Repwd'
 import AdminTerm from '@/components/AdminTerm'
 import SchAllStu from '@/components/SchAllStu'
+import uppwd from '@/components/uppwd'
+import studentInfo from '@/components/studentInfo'
 Vue.use(Router);
 
 export default new Router({
@@ -34,6 +36,8 @@ export default new Router({
         {path:'/Repwd',component:Repwd},
         {path:'/AdminTerm',component:AdminTerm},
         {path:'/SchAllStu',component:SchAllStu},
+        {path:'/uppwd',component:uppwd},
+        {path:'/studentInfo',component:studentInfo},
       ]
     },
 

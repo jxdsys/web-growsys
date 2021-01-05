@@ -76,7 +76,7 @@
         methods: {
           getOldPwd(){
             axios.post("/getPwdByUserName",this.userName).then(res => {
-              alert(res.data)
+              // alert(res.data)
               this.password = res.data.data;
             })
           },
