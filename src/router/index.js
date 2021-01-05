@@ -3,9 +3,13 @@ import Router from 'vue-router'
 import login from '@/components/login'
 
 import Homes from '@/components/Homes'
+import SchAppra from '@/components/SchAppra'
 import welcome from '@/components/welcome'
 import studentInfo from '@/components//studentInfo'
 import uppwd from '@/components/uppwd'
+import Repwd from '@/components/Repwd'
+import AdminTerm from '@/components/AdminTerm'
+import SchAllStu from '@/components/SchAllStu'
 
 
 Vue.use(Router)
@@ -24,7 +28,13 @@ export default new Router({
       redirect:"/studentInfo",
       children:[
         {path:'/studentInfo',component:studentInfo},
-        {path:'/uppwd',component:uppwd}
+        {path:'/uppwd',component:uppwd},
+        {path:'/SchAppra',component:SchAppra},
+        {path:'/Repwd',component:Repwd},
+        {path:'/AdminTerm',component:AdminTerm},
+        {path:'/welcome',component:welcome},
+        {path:'/SchAllStu',component:SchAllStu},
+
       ]
     },
 
