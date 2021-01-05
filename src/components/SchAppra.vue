@@ -1,15 +1,16 @@
 <template>
   <div>
-    <el-container>
+    <h2 align="center">学校评价人信息</h2>
 
-      <el-main>
 
-        <div align="left">
+
+
+        <div align="left" style="float: left">
           <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
           <el-button type="primary" @click="querySchAppra">查询</el-button>
         </div>
 
-        <div align="right">
+        <div align="right" style="float: right">
           <el-button type="primary" @click="showAdd">新增</el-button>
           <el-button type="primary" @click="delBatch">删除</el-button>
         </div>
@@ -46,12 +47,12 @@
           </div>
         </el-dialog>
 
-
+        <div style="margin-top: 70px">
         <el-table
           :data="tableData"
           border
           stripe
-          height="360px"
+          height="335px"
           style="width: 100%"
           @selection-change="handleSelectionChange">
 
@@ -108,10 +109,10 @@
           @current-change="handleCurrentChange"
         >
         </el-pagination>
-      </el-main>
+
 
       <el-footer>最终解释权归我所有</el-footer>
-    </el-container>
+        </div>
 
   </div>
 </template>

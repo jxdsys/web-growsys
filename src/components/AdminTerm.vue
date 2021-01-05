@@ -1,15 +1,13 @@
 <template>
   <div>
-    <el-container>
+    <h2 align="center">维护班期</h2>
 
-      <el-main>
-
-        <div align="left">
+        <div align="left" style="float: left">
           <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
           <el-button type="primary" @click="querySchAppra">查询</el-button>
         </div>
 
-        <div align="right">
+        <div align="right" style="float: right">
           <el-button type="primary" @click="showAdd">新增班期</el-button>
         </div>
 
@@ -25,7 +23,7 @@
             </el-form-item>
 
             <el-form-item label="任课老师" :label-width="formLabelWidth" prop="sch_appra_id">
-              <el-select placeholder="请选择任课老师" style="width: 350px">
+              <el-select v-model="form.schAppraId" placeholder="请选择任课老师" style="width: 350px">
                 <el-option v-for="schoolappra in this.schoolappraList" :value="schoolappra.schAppraId" :label="schoolappra.schAppraName"></el-option>
               </el-select>
             </el-form-item>
@@ -38,12 +36,13 @@
           </div>
         </el-dialog>
 
+        <div style="margin-top: 70px"></div>
 
         <el-table
           :data="tableData"
           border
           stripe
-          height="360px"
+          height="335px"
           style="width: 100%"
           @selection-change="handleSelectionChange">
 
@@ -91,10 +90,10 @@
           @current-change="handleCurrentChange"
         >
         </el-pagination>
-      </el-main>
+
 
       <el-footer>最终解释权归我所有</el-footer>
-    </el-container>
+
 
   </div>
 </template>
@@ -217,9 +216,9 @@
 
       },
       getSchAppra: function () {
-          axios.get("/getTeachers").then(res => {
-            this.schoolappraList = res.data;
-          })
+        axios.get("/getTeachers").then(res => {
+          this.schoolappraList = res.data;
+        })
       },
       showAdd: function () {
         this.$confirm('确认新增班期吗?', '提示', {
@@ -245,7 +244,7 @@
         })
       },
       distriTeacher: function (rowData) {
-        this.getSchAppra();
+        //this.getSchAppra();
         this.form = {};
         this.dialogTitle = "分配老师";
         //根据编号获取详细信息，展示到对话框
@@ -253,7 +252,7 @@
           this.form = res.data
           this.dialogFormVisible = true;
         })
-
+          this.getSchAppra();
       },
 
       handleSelectionChange: function (val) {

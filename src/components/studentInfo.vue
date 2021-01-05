@@ -1,12 +1,47 @@
 <template>
   <div>
-    <h2 align="center">重置密码</h2>
+    <el-container>
 
-
+      <el-main>
+          <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 350px" @change="clickTerm($event)">
+            <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
+          </el-select>
         <div align="left">
-          <el-input v-model="listQuery.filter" placeholder="请输入用户姓名" style="width: 200px"></el-input>
-          <el-button type="primary" @click="querySchAppra">查询</el-button>
+          <el-input v-model="listQuery.filter" placeholder="请输入员工姓名" style="width: 200px"></el-input>
+          <el-button type="primary" @click="queryStus">查询</el-button>
         </div>
+        <div align="right">
+          <el-button type="primary" @click="showAdd">新增</el-button>
+          <el-button type="primary" @click="delBatch">删除</el-button>
+        </div>
+
+
+        <!--  新增和编辑的对话框      -->
+        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+          <el-form :model="form" :rules="rules" label-position="right" ref="empform">
+            <el-form-item label="学生姓名" :label-width="formLabelWidth" >
+              <el-input v-model="form.stuname" autocomplete="off" style="width: 350px"></el-input>
+            </el-form-item>
+            <el-form-item label="学生性别" :label-width="formLabelWidth" >
+              <el-select v-model="form.sex" placeholder="请选择" style="width: 350px">
+                <el-option label="男" value="男"></el-option>
+                <el-option label="女" value="女"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="所属班期" :label-width="formLabelWidth" >
+              <el-select v-model="form.termid" placeholder="请选择所属部门" style="width: 350px">
+                <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="closeDlog">取 消</el-button>
+            <el-button type="primary" @click="addEmp">确定</el-button>
+            <!--            <el-button type="primary" @click="editEmp">确定修改</el-button>-->
+          </div>
+        </el-dialog>
 
 
         <el-table
@@ -16,7 +51,6 @@
           height="360px"
           style="width: 100%"
           @selection-change="handleSelectionChange">
-
           <el-table-column
             type="selection"
             width="75" align="center">
@@ -27,30 +61,30 @@
             width="80" align="center">
           </el-table-column>
           <!--          <el-table-column-->
-          <!--            prop="sch_appra_id"-->
-          <!--            label="编号"-->
+          <!--            prop="empno"-->
+          <!--            label="员工id"-->
           <!--            width="240" align="center">-->
           <!--          </el-table-column>-->
           <el-table-column
-            prop="username"
-            label="姓名"
+            prop="stuname"
+            label="学生姓名"
             width="240" align="center">
           </el-table-column>
           <el-table-column
-            prop="password"
-            label="密码"
+            prop="sex"
+            label="学生性别"
             width="240" align="center">
           </el-table-column>
           <el-table-column
-            prop="role"
-            label="角色" align="center">
+            prop="term_name"
+            label="所属班期" align="center">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
             width="100" header-align="center">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleDelete(scope.row)">重置密码</el-button>
+              <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -65,10 +99,10 @@
           @current-change="handleCurrentChange"
         >
         </el-pagination>
-
+      </el-main>
 
       <el-footer>最终解释权归我所有</el-footer>
-
+    </el-container>
 
   </div>
 </template>
@@ -77,10 +111,10 @@
   import axios from 'axios'
 
   export default {
-    name: "Repwd",
+    name: "studentInfo",
     data() {
       return {
-        sname: "",//存储用户名
+        uname:"",//存储用户名
 
         //表格分页查询等相关数据
         tableData: [],
@@ -91,54 +125,72 @@
         listQuery: {//初始查询条件
           limit: 2,
           page: 1,
-          filter: ""
+          filter: "",
+          termid:""
         },
         //总条数
         total: 0,
         //总页数
         pageCount: 0,
         //新增或者编辑功能相关数据
-        dialogTitle: "新增员工",
+        dialogTitle: "新增学员",
         //用来控制对话框的显示和隐藏
         dialogFormVisible: false,
         //定义表单数据
         form: {
-          schAppraId: "",
-          schAppraName: "",
+          stuid: "",
+          stuname: "",
           sex: "",
-          hiredate: "",
-          state: ""
+          termid: ""
         },
         formLabelWidth: "150px",
-        deptList: [],
         rules: {
           ename: [
-            {required: true, message: '请输入姓名', trigger: 'blur'}
+            {required: true, message: '请输入员工姓名', trigger: 'blur'}
           ],
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
           ],
+          hiredate: [
+            {required: true, message: '请输入入职日期', trigger: 'blur'}
+          ],
+          deptid: [
+            {required: true, message: '请选择所属部门', trigger: 'blur'}
+          ]
         },
         //被选中的员工信息
-        checkData: []
+        checkData: [],
+        termList:[]
       }
     },
     methods: {
-      getEmps: function () {
+      getStus: function () {
         //这是用于获取全部的员工数据
         // axios.get("/getEmps/"+this.listQuery.limit+"/"+this.listQuery.page).then(res => {
         //参数过多的时，推荐使用post方式传参
-        axios.post("/getUsers", this.listQuery).then(res => {
+        axios.post("/stuInfo", this.listQuery).then(res => {
           //res.data返回的是json对象数组
-          this.tableData = res.data.users;
+          this.tableData = res.data.data;
           this.total = res.data.total;
           //this.page.currentPage=1;//默认显示第一页
         })
       },
-      querySchAppra: function () {
+      clickTerm(data){
+        this.listQuery.termid = data;
+        this.getStus();
+      },
+      //获取所有班期信息
+      getTerm(){
+        axios.post("/getAllTerm").then(res =>{
+          this.termList = res.data.data
+          //alert(res.data.data)
+        })
+
+      },
+      queryStus: function () {
         //设置传递到后台
         this.listQuery.page = 1;
-        this.getEmps();
+        this.getStus();
         this.page.currentPage = 1;//默认显示第一页
 
       },
@@ -149,15 +201,14 @@
         this.listQuery.limit = val;
         this.listQuery.page = 1;//从第一页开始查询
         this.page.currentPage = 1;//默认显示第一页
-        this.getEmps();
+        this.getStus();
       },
       handleCurrentChange: function (val) {
         //当前页码发生变化时，触发该事件
         //获取当前页码赋值给this.listQuery.page,然后调用getEmps方法
         //val代表当前页码
-
         this.listQuery.page = val;
-        this.getEmps();
+        this.getStus();
       },
       //新增对话框中的取消按钮事件
       closeDlog: function () {
@@ -167,13 +218,13 @@
         this.dialogFormVisible = false
       },
       addEmp: function () {
-        this.$refs["schform"].validate((valid) => {
+        this.$refs["empform"].validate((valid) => {
           if (valid) {
-            axios.post("/addSch", this.form).then(res => {
+            axios.post("/addOrUpdStu", this.form).then(res => {
               if (res.data == "success") {
                 this.form = {};
                 this.dialogFormVisible = false;
-                this.getEmps();
+                this.getStus();
                 this.$message({
                   message: this.dialogTitle + "成功",
                   type: "success"
@@ -181,7 +232,7 @@
               } else {
                 this.form = {};
                 this.dialogFormVisible = false;
-                this.getEmps();
+                this.getStus();
                 this.$message({
                   message: this.dialogTitle + "失败",
                   type: "error"
@@ -195,40 +246,17 @@
       showAdd: function () {
         // this.getDepts();
         this.form = {};
-        this.dialogTitle = "新增";
+        this.dialogTitle = "新增员工";
         this.dialogFormVisible = true;
       },
       handleEdit: function (rowData) {
         this.form = {};
-        this.dialogTitle = "编辑";
+        this.dialogTitle = "编辑员工";
         //根据员工编号获取员工详细信息，展示到对话框
-        axios.get("/getSchById/" + rowData.sch_appra_id).then(res => {
+        axios.get("/getStuById/" + rowData.stuid).then(res => {
 
           this.form = res.data
           this.dialogFormVisible = true;
-        })
-      },
-      handleDelete: function (rowData) {
-        this.$confirm('确认重置密码吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {//确定
-          axios.get("/repwd/" + rowData.userid).then(res => {
-            if (res.data == "success") {
-              this.getEmps();
-              this.page.currentPage = 1;//删除后默认显示第一页
-              this.$message({
-                type: 'success',
-                message: '重置成功!'
-              });
-            } else {
-              this.$message({
-                type: 'error',
-                message: '重置失败!'
-              });
-            }
-          })
         })
       },
 
@@ -250,17 +278,13 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {//确定
-          var arrEmpnos = [];
+          var arrstuids = [];
           for (var i = 0; i < this.checkData.length; i++) {
-            if (this.checkData[i].state == "忙碌") {
-              alert("含授课中的教师，无法删除");
-              return;
-            }
-            arrEmpnos[i] = this.checkData[i].sch_appra_id;
+            arrstuids[i] = this.checkData[i].stuid;
           }
-          axios.post("/delBatchSch", arrEmpnos).then(res => {
+          axios.post("/delBatchStu", arrstuids).then(res => {
             if (res.data == "success") {
-              this.getEmps();
+              this.getStus();
               this.page.currentPage = 1;//删除后默认显示第一页
               this.$message({
                 type: 'success',
@@ -288,9 +312,8 @@
     },
     mounted() {
       //查询数据
-      this.getEmps();
-      //从sessionStorage中获取用户名
-      this.uname = sessionStorage.getItem("uname");
+      this.getStus();
+      this.getTerm();
     },
 
   }
@@ -332,5 +355,3 @@
     line-height: 320px;
   }
 </style>
-
-
