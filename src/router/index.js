@@ -13,6 +13,8 @@ import AdminTerm from '@/components/AdminTerm'
 import SchAllStu from '@/components/SchAllStu'
 import uppwd from '@/components/uppwd'
 import studentInfo from '@/components/studentInfo'
+import Tomark from '@/components/Tomark'
+import Distridept from '@/components/Distridept'
 Vue.use(Router);
 
 export default new Router({
@@ -38,6 +40,8 @@ export default new Router({
         {path:'/SchAllStu',component:SchAllStu},
         {path:'/uppwd',component:uppwd},
         {path:'/studentInfo',component:studentInfo},
+        {path:'/Tomark',component:Tomark},
+        {path:'/Distridept',component:Distridept},
       ]
     },
 

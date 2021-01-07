@@ -3,7 +3,7 @@
 
     <h2 align="center" style="margin-top: auto">学校学生信息</h2>
     <div style="float: right">
-      <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 150px" @change="clickTerm($event)">
+      <el-select clearable v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 118px" @change="clickTerm($event)">
         <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
       </el-select>
     </div>
@@ -54,39 +54,66 @@
         <el-table-column
           prop="html"
           label="HTML笔试"
-          width="50">
+          align="center"
+         >
         </el-table-column>
         <el-table-column
           prop="oracle"
           label="oracle笔试"
-          width="50">
+          align="center"
+          >
         </el-table-column>
         <el-table-column
           prop="js"
           label="js笔试"
-          width="50">
+          align="center"
+          >
         </el-table-column>
         <el-table-column
           prop="java"
           label="java笔试"
-          width="50">
+          align="center"
+          >
         </el-table-column>
         <el-table-column
           prop="superjava"
-          label="java高级笔试"
-          width="50">
+          label="java高级"
+          align="center"
+          >
         </el-table-column>
         <el-table-column
-          prop="L1"
+          prop="l1"
           label="L1面试"
-          width="50">
+          align="center"
+          >
         </el-table-column>
       </el-table-column>
 
       <el-table-column
-        prop="dcrib"
-        label="学校评价"
-        align="center">
+        fixed="right"
+        label="整体评价分数"
+        align="center"
+        prop="apprascore"
+        width="150px"
+        >
+        <template slot-scope="{row}">
+          <el-rate v-if="row.apprascore > 0"
+                   v-model="row.apprascore"
+                   disabled
+                   text-color="#101010"
+                   :colors="scoreColors"
+          >
+          </el-rate>
+          <el-rate v-else
+                   v-model="row.apprascore"
+                   disabled
+                   show-score
+                   text-color="#101010"
+                   score-template="暂无评分"
+                   :colors="scoreColors"
+          >
+          </el-rate>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -112,12 +139,17 @@
   import axios from 'axios'
 
   export default {
+
     name: "SchAppra",
     data() {
       return {
+        value2: null,
+        scoreColors: ['#97A5BF', '#F7BA2A', '#FF9900'],   // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+        texts:['极差','差','一般','良好','优秀'],
         sname: "",//存储用户名
         //表格分页查询等相关数据
         tableData: [],
+        apprascore:"",
         page: {
           currentPage: 1,//当前页码
           sizes: [2, 4, 6, 8, 10],
@@ -202,6 +234,12 @@
         })
 
       },
+      updateTermAndTeacherState:function () {
+        axios.get("/getUpdState/"+this.listQuery.userName).then(res => {
+          //alert(this.listQuery.userName)
+          return;
+        })
+      }
     },
 
 
@@ -210,6 +248,7 @@
     },
     mounted() {
       this.listQuery.userName = sessionStorage.getItem("userName")
+      this.updateTermAndTeacherState()
       //查询数据
       this.getEmps();
       //从sessionStorage中获取用户名
