@@ -245,7 +245,7 @@
         })
       },
       distriTeacher: function (rowData) {
-        this.getSchAppra();
+        //this.getSchAppra();
         this.form = {};
         this.dialogTitle = "分配老师";
         //根据编号获取详细信息，展示到对话框
@@ -253,6 +253,7 @@
           this.form = res.data
           this.dialogFormVisible = true;
         })
+          this.getSchAppra();
       },
 
       handleSelectionChange: function (val) {

@@ -1,4 +1,9 @@
 <template>
+  <div>
+    <div>
+      <h2 align="center">修改密码</h2>
+    </div>
+  <div align="center" style="width: 500px;float: left;padding: 50px 0px 0px 300px">
   <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
     <el-form-item label="旧密码" prop="oldPass">
       <el-input type="password" v-model="ruleForm.oldpass" autocomplete="off"></el-input>
@@ -14,7 +19,8 @@
       <el-button @click="resetForm('ruleForm')">重置</el-button>
     </el-form-item>
   </el-form>
-
+  </div>
+  </div>
 </template>
 
 <script>
@@ -50,10 +56,12 @@
           };
           return {
             ruleForm: {
+              userid:'',
               pass: '',
               checkPass: '',
               age: '',
-              oldpass:''
+              oldpass:'',
+              userName:''
             },
             userName:'',
             password:'',
@@ -76,13 +84,13 @@
         methods: {
           getOldPwd(){
             axios.post("/getPwdByUserName",this.userName).then(res => {
-              alert(res.data)
-              this.password = res.data.data;
+              // alert(res.data)
+              this.password = res.data.password;
+              this.ruleForm.userid = res.data.userid;
             })
           },
           submitForm(formName) {
             this.$refs[formName].validate((valid) => {
-              alert(this.password)
               if (this.password == this.ruleForm.oldpass) {
                 if (valid) {
                   axios.post("updPwd",this.ruleForm).then(res =>{
@@ -98,7 +106,6 @@
                       })
                     }
                   })
-                  alert('submit!');
                 } else {
                   console.log('error submit!!');
                   return false;
@@ -118,6 +125,7 @@
         },
       created() {
         this.userName = sessionStorage.getItem("userName")
+        this.ruleForm.userName = sessionStorage.getItem("userName")
         this.getOldPwd();
       }
     }

@@ -1,16 +1,19 @@
 <template>
   <div>
     <el-container>
-
+      <h2 align="center">学生信息</h2>
       <el-main>
-          <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 350px" @change="clickTerm($event)">
+        <div style="float: left ;padding: 5px 5px 5px 0px">
+          <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 150px" @change="clickTerm($event)">
             <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
           </el-select>
-        <div align="left">
+        </div>
+
+        <div align="left"style="float: left ;padding: 5px 0px 5px 5px">
           <el-input v-model="listQuery.filter" placeholder="请输入员工姓名" style="width: 200px"></el-input>
           <el-button type="primary" @click="queryStus">查询</el-button>
         </div>
-        <div align="right">
+        <div align="right" style="float: right ;padding: 5px 0px 5px 5px">
           <el-button type="primary" @click="showAdd">新增</el-button>
           <el-button type="primary" @click="delBatch">删除</el-button>
         </div>
@@ -18,20 +21,20 @@
 
         <!--  新增和编辑的对话框      -->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+
+
           <el-form :model="form" :rules="rules" label-position="right" ref="empform">
-            <el-form-item label="学生姓名" :label-width="formLabelWidth" >
-              <el-input v-model="form.stuname" autocomplete="off" style="width: 350px"></el-input>
+            <el-form-item label="学生姓名" :label-width="formLabelWidth" prop="stuname">
+              <el-input v-model="form.stuname" autocomplete="off" style="width: 350px" ></el-input>
             </el-form-item>
-            <el-form-item label="学生性别" :label-width="formLabelWidth" >
-              <el-select v-model="form.sex" placeholder="请选择" style="width: 350px">
-                <el-option label="男" value="男"></el-option>
-                <el-option label="女" value="女"></el-option>
-              </el-select>
+            <el-form-item label="学生性别" :label-width="formLabelWidth" prop="sex">
+              <el-radio v-model="form.sex" label="男">男</el-radio>
+              <el-radio v-model="form.sex" label="女">女</el-radio>
             </el-form-item>
 
-            <el-form-item label="所属班期" :label-width="formLabelWidth" >
-              <el-select v-model="form.termid" placeholder="请选择所属部门" style="width: 350px">
-                <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
+            <el-form-item label="所属班期" :label-width="formLabelWidth" prop="freeTerm">
+              <el-select v-model="form.termid" placeholder="请选择所属部门" style="width: 350px" >
+                <el-option v-for="term in this.freeTerm" :value="term.term_id" :label="term.term_name"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
@@ -85,6 +88,7 @@
             width="100" header-align="center">
             <template slot-scope="scope">
               <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -128,6 +132,7 @@
           filter: "",
           termid:""
         },
+        freeTerm:[],
         //总条数
         total: 0,
         //总页数
@@ -145,17 +150,14 @@
         },
         formLabelWidth: "150px",
         rules: {
-          ename: [
-            {required: true, message: '请输入员工姓名', trigger: 'blur'}
+          stuname: [
+            {required: true, message: '请输入学生姓名', trigger: 'blur'},
           ],
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
           ],
-          hiredate: [
-            {required: true, message: '请输入入职日期', trigger: 'blur'}
-          ],
-          deptid: [
-            {required: true, message: '请选择所属部门', trigger: 'blur'}
+          freeTerm: [
+            {required: true, message: '请选择所属班期', trigger: 'blur'}
           ]
         },
         //被选中的员工信息
@@ -175,6 +177,20 @@
           //this.page.currentPage=1;//默认显示第一页
         })
       },
+      //获取已分配老师并且未结课的班期
+      getBusyTerm(){
+        axios.post("getBusyTerm").then(res =>{
+          if (res.data.count = "200") {
+            this.freeTerm = res.data.data;
+          }else {
+            this.$message({
+              message: "未结课的班期全部未分配老师",
+              type: "error"
+            })
+          }
+        })
+
+      },
       clickTerm(data){
         this.listQuery.termid = data;
         this.getStus();
@@ -183,7 +199,6 @@
       getTerm(){
         axios.post("/getAllTerm").then(res =>{
           this.termList = res.data.data
-          alert(res.data.data)
         })
 
       },
@@ -214,6 +229,7 @@
       closeDlog: function () {
         //清空数据
         this.form = {};
+        this.getBusyTerm();
         //关闭对话框
         this.dialogFormVisible = false
       },
@@ -245,11 +261,17 @@
       },
       showAdd: function () {
         // this.getDepts();
+        this.$nextTick(() => {
+          this.$refs['empform'].clearValidate()
+        })
         this.form = {};
         this.dialogTitle = "新增员工";
         this.dialogFormVisible = true;
       },
       handleEdit: function (rowData) {
+        this.$nextTick(() => {
+          this.$refs['empform'].clearValidate()
+        })
         this.form = {};
         this.dialogTitle = "编辑员工";
         //根据员工编号获取员工详细信息，展示到对话框
@@ -265,6 +287,7 @@
         this.checkData = val;
 
       },
+      //多删
       delBatch: function () {
         if (this.checkData.length == 0) {
           this.$message({
@@ -304,6 +327,30 @@
           });
         });
       },
+      //单删
+      handleDelete: function (rowData) {
+        this.$confirm('确认删除所选记录吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {//确定
+          axios.post("/delStu" , rowData.stuid).then(res => {
+            if (res.data == "success") {
+              this.getStus();
+              this.page.currentPage = 1;//删除后默认显示第一页
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            } else {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+            }
+          })
+        })
+      },
     },
 
 
@@ -314,6 +361,7 @@
       //查询数据
       this.getStus();
       this.getTerm();
+      this.getBusyTerm();
     },
 
   }

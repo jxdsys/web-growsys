@@ -3,9 +3,9 @@
     <el-container class="home-container">
       <el-header>
         <div>
-          <span>金桥学员成长跟踪系统</span>
+          <span>金桥学员成长跟踪系统({{userName}})</span>
         </div>
-        <el-button type="info">安全退出</el-button>
+
       </el-header>
       <el-container>
         <el-aside :width="isCollapse ? '64px' : '200px'">
@@ -13,7 +13,8 @@
           <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff"
                    unique-opened :router="true" :collapse="isCollapse" :collapse-transition="false"
           :default-active="activePath">
-              <el-menu-item  :index="menu.path" v-for="menu in menuList" :key="menu.id" @click="saveNavState(menu.path)">
+              <el-menu-item :index="menu.path" v-for="menu in menuList" :key="menu.id"
+                           @click="saveNavState(menu.path)">
                 <template slot="title">
                   <span>{{menu.title}}</span>
                 </template>
@@ -28,24 +29,22 @@
     </el-container>
   </div>
 </template>
-
 <script>
   import axios from 'axios'
-
   export default {
     name: "Homes",
     data() {
       return {
         menuList: [],
+        userName:sessionStorage.getItem("userName"),
         isCollapse:false,
-        activePath:"/studentInfo",
+        activePath:"/welcome",
         role:sessionStorage.getItem("role")
-
       }
     },
     methods: {
       getMenuList: function () {
-        // alert(this.role)
+          // alert(this.role)
         axios.post("/getMenu",this.role).then(res => {
           if (res.status == "200") {
             this.menuList = res.data.data;
@@ -55,25 +54,39 @@
         })
       },
       saveNavState:function (activePath) {
-        this.activePath = activePath;
-        sessionStorage.setItem('activePath',this.activePath)
-      }
-
+           // this.activePath = activePath;
+           if(activePath =="/exit"){
+               this.$confirm('是否退出系统?', '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消',
+                   type: 'warning'
+               }).then(() => {//确定
+                   this.$router.push({
+                       path: '/'
+                   });
+               }).catch(() => {
+                   this.$router.go(-1);
+                   this.$message({
+                       type: 'info',
+                       message: '已取消退出'
+                   });
+               })
+           }else{
+               this.activePath = activePath;
+           }
+           sessionStorage.setItem('activePath',this.activePath)
+        }
     },
     created() {
       this.getMenuList();
       this.activePath = sessionStorage.getItem("activePath")
     }
-
-
   }
 </script>
-
 <style scoped>
   .home-container {
     height: 630px;
   }
-
   .el-header {
     background-color: #373d41;
     background-color: #373d41;
