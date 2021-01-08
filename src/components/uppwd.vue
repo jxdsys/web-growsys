@@ -82,7 +82,7 @@
           },
           submitForm(formName) {
             this.$refs[formName].validate((valid) => {
-              alert(this.password)
+             // alert(this.password)
               if (this.password == this.ruleForm.oldpass) {
                 if (valid) {
                   axios.post("updPwd",this.ruleForm).then(res =>{
@@ -98,7 +98,7 @@
                       })
                     }
                   })
-                  alert('submit!');
+                  //alert('submit!');
                 } else {
                   console.log('error submit!!');
                   return false;

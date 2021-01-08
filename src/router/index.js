@@ -13,6 +13,7 @@ import AdminTerm from '@/components/AdminTerm'
 import SchAllStu from '@/components/SchAllStu'
 import uppwd from '@/components/uppwd'
 import studentInfo from '@/components/studentInfo'
+import DeptAppraSetScore from '@/components/DeptAppraSetScore'
 Vue.use(Router);
 
 export default new Router({
@@ -38,6 +39,7 @@ export default new Router({
         {path:'/SchAllStu',component:SchAllStu},
         {path:'/uppwd',component:uppwd},
         {path:'/studentInfo',component:studentInfo},
+        {path:'/markemp',component:DeptAppraSetScore},
       ]
     },
 

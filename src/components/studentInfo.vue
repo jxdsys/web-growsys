@@ -183,7 +183,7 @@
       getTerm(){
         axios.post("/getAllTerm").then(res =>{
           this.termList = res.data.data
-          alert(res.data.data)
+          //alert(res.data.data)
         })
 
       },

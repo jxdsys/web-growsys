@@ -188,7 +188,7 @@
                         axios.post("/addDept",this.form).then(res =>{
                             if(res.data=="success"){
                                 this.form={};
-                                this.dialogFormVisible=false;
+                               this.dialogFormVisible=false;
                                 //开户
                                 this.getDept()
                                 if(this.isadd){
@@ -199,7 +199,7 @@
 
                             }else{
                                 this.form={};
-                                this.dialogFormVisible=false;
+                               this.dialogFormVisible=false;
                                 this.getDept()
                                 if(this.isadd){
                                     this.$message({message:"新增失败", type:"error"})
