@@ -4,7 +4,7 @@
       <h2 align="center">学生信息</h2>
       <el-main>
         <div style="float: left ;padding: 5px 5px 5px 0px">
-          <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 150px" @change="clickTerm($event)">
+          <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 150px" @change="clickTerm($event)" >
             <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
           </el-select>
         </div>
@@ -32,7 +32,7 @@
               <el-radio v-model="form.sex" label="女">女</el-radio>
             </el-form-item>
 
-            <el-form-item label="所属班期" :label-width="formLabelWidth" prop="freeTerm">
+            <el-form-item label="所属班期" :label-width="formLabelWidth" prop="termid">
               <el-select v-model="form.termid" placeholder="请选择所属部门" style="width: 350px" >
                 <el-option v-for="term in this.freeTerm" :value="term.term_id" :label="term.term_name"></el-option>
               </el-select>
@@ -156,7 +156,7 @@
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
           ],
-          freeTerm: [
+          termid: [
             {required: true, message: '请选择所属班期', trigger: 'blur'}
           ]
         },

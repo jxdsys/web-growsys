@@ -143,6 +143,7 @@
         <td class="widthcomplex">{{TableStu.people}}</td>
         <td rowspan="4">
           <img v-if="form.pictureAdd" :src="require('../assets/img/' + form.pictureAdd)" class="avatar" width="140px" height="220px">
+          <img v-else src="../assets/logo.png" class="avatar" width="140px" height="220px">
         </td>
       </tr>
       <tr>
@@ -268,13 +269,8 @@
       methods:{
           isUpdStu(){
             axios.post("isUpdStu",this.form.stuid).then(res => {
-              if (res.data.return == "2") {
-                this.form.stuname = res.data.data.stuname;
-                this.form.sex = res.data.data.sex;
-              }else if (res.data.return == "1") {
                  this.TableStu = res.data.data;
                 this.form = res.data.data;
-              }
             })
           },
         //清除图片验证
