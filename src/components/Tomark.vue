@@ -117,7 +117,10 @@
             <tr>
               <td>评价(优点缺点)</td>
               <td colspan="9">
-                <textarea rows="4" cols="90" style="border: 0">{{this.form.content}}</textarea>
+                <el-form-item prop="content">
+                  <el-input v-model="form.content" autocomplete="off" style="width: 750px;height: 50px"></el-input>
+                </el-form-item>
+<!--                <textarea rows="4" cols="90" style="border: 0">{{this.form.content}}</textarea>-->
               </td>
             </tr>
             <tr>
@@ -360,7 +363,7 @@
         rules: {
           apprascore: [
             {required: true, message: '请输入', trigger: 'blur'},
-            // { type: 'number',min: 1, max: 5, message: '请输入1-5之间的整数', trigger: "blur" }
+             //{ type: 'number',min: 1, max: 5, message: '请输入1-5之间的整数', trigger: "blur" }
           ],
 
         },
@@ -391,12 +394,8 @@
 
         this.$refs["schform"].validate((valid) => {
           if (valid) {
-            alert(this.form.sch_appra_id)
-            //alert(this.form.L1)
             axios.post("/tocommit", this.form).then(res => {
-              alert(this.form.sch_appra_id)
               if (res.data == "success") {
-
                 this.form = {};
                 this.dialogFormVisible = false;
                 this.getEmps();
@@ -510,13 +509,15 @@
     },
     mounted() {
       this.listQuery.userName = sessionStorage.getItem("userName");
+      this.getThatTerm();
       this.teachid = sessionStorage.getItem("teachid")
+      //获取班期
+      this.getTerm();
       //查询数据
       this.getEmps();
       //从sessionStorage中获取用户名
       //this.uname = sessionStorage.getItem("uname");
-      //获取班期
-      this.getTerm();
+
       this.getThatTerm();
       // this.listQuery.userName = sessionStorage.getItem("userName")
       //alert(this.listQuery.userName)

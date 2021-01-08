@@ -26,7 +26,7 @@
                 <el-radio label="男" value="男" v-model="form.sex"></el-radio>
                 <el-radio label="女" value="女" v-model="form.sex"></el-radio>
             </el-form-item>
-            <el-form-item label="入职日期" :label-width="formLabelWidth" prop="hiredate">
+            <el-form-item label="入职日期" :label-width="formLabelWidth" prop="hiredate" >
               <el-date-picker
                 v-model="form.hiredate"
                 format="yyyy-MM-dd"
@@ -35,6 +35,7 @@
                 type="date"
                 placeholder="选择日期"
                 style="width: 350px"
+                @change="judgetime"
               >
               </el-date-picker>
             </el-form-item>
@@ -82,7 +83,7 @@
           </el-table-column>
           <el-table-column
             prop="hiredate"
-            label="入职日期" align="center">
+            label="入职日期" align="center" >
           </el-table-column>
           <el-table-column
             prop="state"
@@ -123,6 +124,15 @@
   export default {
     name: "SchAppra",
     data() {
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入'));
+        } else if (value >=this.getdatatime()) {
+          callback(new Error('选中时间不得大于当前时间!'));
+        } else {
+          callback();
+        }
+      };
       return {
         sname: "",//存储用户名
         //表格分页查询等相关数据
@@ -152,6 +162,7 @@
           hiredate: "",
           state: ""
         },
+        curtime:"",
         formLabelWidth: "150px",
         deptList: [],
         rules: {
@@ -161,8 +172,12 @@
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
           ],
-          hiredate:[
-            {required: true, message: '请输入入职日期', trigger: 'blur'}
+          // hiredate:[
+          //   {required: true, message: '请输入入职日期', trigger: 'blur'}
+          // ],
+          hiredate: [
+             {required: true, message: '请输入入职日期', trigger: 'blur'},
+            { validator: validatePass2, trigger: 'blur' }
           ]
         },
         //被选中的员工信息
@@ -265,6 +280,11 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {//确定
+          //alert(rowData.state)
+          if (rowData.state == "忙碌") {
+            alert("该教师授课中，无法删除")
+            return;
+          }
           axios.get("/delSch/" + rowData.sch_appra_id).then(res => {
             if (res.data == "success") {
               this.getEmps();
@@ -331,6 +351,14 @@
           });
         });
       },
+      getdatatime(){//默认显示今天
+        this.curtime= new Date();
+        var year=this.curtime.getFullYear();
+        var month= this.curtime.getMonth()+1<10 ? "0"+(this.curtime.getMonth()+1) : this.curtime.getMonth()+1;
+        var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
+        return year+"-"+month+"-"+day;
+      },
+
     },
 
 
@@ -342,6 +370,8 @@
       this.getEmps();
       //从sessionStorage中获取用户名
       this.uname = sessionStorage.getItem("uname");
+      //获取系统当前时间
+      this.getdatatime();
     },
 
   }

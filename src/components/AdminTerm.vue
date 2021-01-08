@@ -3,7 +3,7 @@
     <h2 align="center">维护班期</h2>
 
         <div align="left" style="float: left">
-          <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
+          <el-input v-model="listQuery.filter" placeholder="请输入班期编号进行查询" style="width: 200px"></el-input>
           <el-button type="primary" @click="querySchAppra">查询</el-button>
         </div>
 
@@ -73,10 +73,15 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="100" header-align="center">
-            <template slot-scope="scope">
-              <el-button type="text" @click="distriTeacher(scope.row)">分配教师</el-button>
-            </template>
+            width="150" header-align="center">
+              <template slot-scope="scope">
+
+                <span v-if="scope.row.sch_appra_name == null" class="el-button"
+                      @click="distriTeacher(scope.row)" >分配教师</span>
+                <span v-if="scope.row.sch_appra_name!=null" style="align-content: center">已分配</span>
+              </template>
+
+<!--              <el-button type="text" @click="distriTeacher(scope.row)">分配教师</el-button>-->
           </el-table-column>
         </el-table>
         <el-pagination
@@ -109,6 +114,7 @@
 
         //表格分页查询等相关数据
         tableData: [],
+        schoolappraList:[],
         page: {
           currentPage: 1,//当前页码
           sizes: [2, 4, 6, 8, 10],
@@ -311,6 +317,9 @@
 
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+  .el-button{
+
   }
 </style>
 
