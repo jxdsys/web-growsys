@@ -256,6 +256,13 @@
                 disabled3: true,
                 disabled4: true,
                 disabled5: false,
+                //入职日期
+                hiredate:"",
+                //当前时间
+                curtime:"",
+                //日期的差值
+                num:"",
+                //表数据
                 tableData: []
                 , page: {
                     currentPage: 1//当前页码
@@ -398,9 +405,9 @@
                 //this.dialogFormVisible = true
                 this.disnoabledfun()
                 this.dialogFormVisible = true
-                this.from.dateid = 0
-                this.getScore(0)
-                this.dialogFormVisible = true
+               // this.from.dateid = 0
+                //this.getScore(0)
+                //this.dialogFormVisible = true
 
             }, //获取分数信息
             getScore:function(timeida){
@@ -429,6 +436,7 @@
             //打开评分页面
             setMark: function (rowData) {
                 this.disabledfun()
+
                 this.FormTitle = rowData.stuname + "的成绩"
                 //this.form.desc = "第三年评分不能为零"
                 // this.dialogFormVisible = true
@@ -436,6 +444,9 @@
                 axios.post("/getEmpInfoById", rowData.stuid).then(res => {
                     //this.form =res.data
                     this.baseData = res.data
+                    //获取入职日期
+                    this.hiredate = res.data.hiredate
+                    sessionStorage.setItem("hiredate",res.data.hiredate)
                     //this.baseData1=res.data
                 })
                 //获取评价人
@@ -446,6 +457,14 @@
                 this.form.stuid = rowData.stuid;
                 sessionStorage.setItem("stuid",rowData.stuid)
                 //查询成绩(判断是否需要评分)
+                //添加一个判断，事件间隔大于三个月才可以进行评分
+                this.hiredate=sessionStorage.getItem("hiredate")
+                //alert(this.hiredate-this.curtime)
+                this.curtime = new Date();
+                var empdate = new Date(this.hiredate);
+                this.num = (this.curtime - empdate)/(1000*3600*24);//天数，一天算一年
+                //根据该数值对能评价的人的地方进行释放，自动释放
+                //alert(this.num)
                 if (rowData.score0 == 0 || rowData.score0 == null) {
                     this.disabled1 = false
                     this.form.dateid = 0;
@@ -469,6 +488,8 @@
                         }
                     }
                 }
+                //this.hiredate=sessionStorage.getItem("hiredate")
+                //alert(this.hiredate)
                 this.dialogFormVisible = true
             },
             openform:function(){
@@ -534,7 +555,6 @@
             //跳转到转正评价（也是默认的界面）
             toMark1:function(){
                 this.openform()
-
                 this.form.dateid =0;
                 this.getScore(0)
                 this.activeIndex ="1";
@@ -562,6 +582,7 @@
                 this.getScore(3)
                 this.activeIndex ="4";
             },
+            //默认所有按钮禁用
             disabledfun:function(){
                 this.disabled1= true;
                 this.disabled2= true;
@@ -569,12 +590,21 @@
                 this.disabled4= true;
                 this.disabled5= false;
             },
+            //默认所有按钮开启
             disnoabledfun:function(){
                 this.disabled1=false
                 this.disabled2=false;
                 this.disabled3=false;
                 this.disabled4= false;
                 this.disabled5= true;
+            },
+            //获取当前时间
+            getdatatime(){//默认显示今天
+                this.curtime= new Date();
+                var year=this.curtime.getFullYear();
+                var month= this.curtime.getMonth()+1<10 ? "0"+(this.curtime.getMonth()+1) : this.curtime.getMonth()+1;
+                var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
+                return year+"-"+month+"-"+day;
             },
             //关闭页面
             closeDlog: function () {
@@ -593,6 +623,7 @@
             this.getDept()
             this.getAllEmpInfo()
             this.from.stuid =sessionStorage.getItem("stuid");
+            this.getdatatime()
         }
     }
 </script>
