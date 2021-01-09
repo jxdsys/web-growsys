@@ -278,6 +278,7 @@
       this.getSchAppra();
       //从sessionStorage中获取用户名
       this.uname = sessionStorage.getItem("uname");
+
     },
 
   }

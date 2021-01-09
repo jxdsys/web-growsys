@@ -143,9 +143,9 @@
     name: "SchAppra",
     data() {
       return {
-        value2: null,
+        //value2: null,
         scoreColors: ['#97A5BF', '#F7BA2A', '#FF9900'],   // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
-        texts:['极差','差','一般','良好','优秀'],
+        //texts:['极差','差','一般','良好','优秀'],
         sname: "",//存储用户名
         //表格分页查询等相关数据
         tableData: [],

@@ -80,37 +80,37 @@
               </td>
               <td>
                 <el-form-item prop="html">
-                <el-input v-model="form.html" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.html" autocomplete="off" style="width: 50px" align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="oracle">
-                <el-input v-model="form.oracle" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.oracle" autocomplete="off" style="width: 50px" align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="js">
-                <el-input v-model="form.js" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.js" autocomplete="off" style="width: 50px" align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="java">
-                <el-input v-model="form.java" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.java" autocomplete="off" style="width: 50px" align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="superjava">
-                <el-input v-model="form.superjava" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.superjava" autocomplete="off" style="width: 50px" align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="l1">
-                <el-input v-model="form.l1" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.l1" autocomplete="off" style="width: 50px" align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="apprascore">
-                <el-input v-model="form.apprascore" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.apprascore" autocomplete="off" style="width: 50px" align="center"></el-input>
                 </el-form-item>
               </td>
             </tr>
@@ -293,6 +293,38 @@
   export default {
     name: "Tomark",
     data() {
+      var checkapprascore = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('不能为空'));
+        }
+        setTimeout(() => {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          }
+          if (value <= 0||value>5) {
+              callback(new Error('必须在1-5的数字'));
+            } else {
+              callback();
+            }
+
+        });
+      };
+      var checkscore = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('不能为空'));
+        }
+        setTimeout(() => {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          }
+          if (value <= 0||value>100) {
+            callback(new Error('必须在1-100的数字'));
+          } else {
+            callback();
+          }
+
+        });
+      };
       return {
         sname: "",//存储用户名
         teachid: "",
@@ -362,9 +394,30 @@
         deptList: [],
         rules: {
           apprascore: [
-            {required: true, message: '请输入', trigger: 'blur'},
-             //{ type: 'number',min: 1, max: 5, message: '请输入1-5之间的整数', trigger: "blur" }
+            {required: true, message: '请输入', trigger: 'blur'}
           ],
+          apprascore: [
+            { validator: checkapprascore, trigger: 'blur' }
+          ],
+          html:[
+            { validator: checkscore, trigger: 'blur' }
+          ],
+          oracle:[
+            {validator: checkscore, trigger: 'blur'}
+          ],
+          js:[
+            {validator: checkscore, trigger: 'blur'}
+          ],
+          superjava:[
+            {validator: checkscore, trigger: 'blur'}
+          ],
+          java:[
+            {validator: checkscore, trigger: 'blur'}
+          ],
+          l1:[
+            {validator: checkscore, trigger: 'blur'}
+          ]
+
 
         },
         //被选中的员工信息
@@ -420,6 +473,9 @@
       setMark:function (rowData) {
         this.dialogTitle ="评分"
         this.dialogFormVisible=true
+        this.$nextTick(() => {
+          this.$refs['schform'].clearValidate()
+        });
         //获取员工个人的详细信息
         axios.post("/SchoolGetStu",rowData.stuid).then(res => {
           //this.form =res.data
@@ -541,11 +597,15 @@
     width: 100%;
     height: 150px;
   }
-  el-input{
-    border: 0;
-    width: 95%;
-    height: 95%;
-    text-align: center;
+ el-input{
+
+    -webkit-appearance: none;
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    border: 0px;//改成0，边框就消失了！
+  width: 100%;
+
   }
   textarea{
     border: 0;
@@ -586,6 +646,8 @@
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }
+
+
 </style>
 
 

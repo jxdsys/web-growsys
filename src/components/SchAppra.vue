@@ -231,12 +231,12 @@
         this.$refs["schform"].validate((valid) => {
           if (valid) {
             axios.post("/addSch", this.form).then(res => {
-              if (res.data == "success") {
+              if (res.data != "") {
                 this.form = {};
                 this.dialogFormVisible = false;
                 this.getEmps();
                 this.$message({
-                  message: this.dialogTitle + "成功",
+                  message: this.dialogTitle + "成功，" + "新增学校评价人的id是："+res.data,
                   type: "success"
                 })
               } else {

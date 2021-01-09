@@ -78,8 +78,8 @@
 
 <style scoped>
   .back{
-    background:url(../assets/3.1.jpg  );
-   height: 705px;
+    background:url(../assets/6.6.jpg  ) ;
+   height: 639px;
   }
   .loginContainer{
     /*float: right;*/
@@ -88,7 +88,7 @@
     position:relative;
     left: 3%;
     top: 140px;
-    background-color: aliceblue;
+    background-color: lightskyblue;
     padding: 10px 30px 20px 10px
   }
 </style>
