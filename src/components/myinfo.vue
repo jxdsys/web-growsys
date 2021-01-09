@@ -119,6 +119,7 @@
 
       <div align="center" style="margin-top: 10px">
         <el-button type="primary" @click="updStu" >确定</el-button>
+        <el-button type="primary" @click="isno" >取消</el-button>
     </div>
 
   </el-dialog>
@@ -130,6 +131,7 @@
   <el-row style="margin-bottom: 10px;margin-top: 10px">
     <el-col :span="1" :offset="21"><div class="grid-content bg-purple-dark">
       <el-button type="primary" @click="updInfo" style="width: 110px">修改</el-button>
+
     </div></el-col>
   </el-row>
 
@@ -346,6 +348,10 @@
           var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
           return year+"-"+month+"-"+day;
         },
+        isno(){
+          this.dialogFormVisible = false;
+          this.isUpdStu();
+        }
       },
       mounted(){
             this.form.stuid = sessionStorage.getItem("userName")

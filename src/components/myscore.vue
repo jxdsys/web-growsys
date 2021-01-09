@@ -1,24 +1,26 @@
 <template>
-  <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="学校评价" name="first">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0">
+  <div>
+  <p style="font-size: 22px ;font-weight: bold" >我的成绩</p>
+  <el-tabs v-model="activeName" @tab-click="handleClick" style="float: left;padding: 0px 0px 0px 45px;font-size: ">
+    <el-tab-pane label="学校评价" name="first"  >
+      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2">培训学校</td>
-          <td rowspan="2">班期</td>
-          <td rowspan="2">评价人</td>
-          <td colspan="6">培训期间成绩</td>
-          <td rowspan="2">整体评价分数</td>
+          <td rowspan="2" width="120px" height="80px">培训学校</td>
+          <td rowspan="2" width="100px"  height="80px">班期</td>
+          <td rowspan="2" width="100px"  height="80px">评价人</td>
+          <td colspan="6" height="40px">培训期间成绩</td>
+          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td>html笔试</td>
-          <td>oracle成绩</td>
-          <td>js成绩</td>
-          <td>java基础</td>
-          <td>java高级</td>
-          <td>L1面试</td>
+          <td width="80px" height="40px">html笔试</td>
+          <td width="80px" height="40px">oracle成绩</td>
+          <td width="80px" height="40px">js成绩</td>
+          <td width="80px" height="40px">java基础</td>
+          <td width="80px" height="40px">java高级</td>
+          <td width="80px" height="40px">L1面试</td>
         </tr>
         <tr>
-          <td>学习评价</td>
+          <td height="80px">学习评价</td>
           <td>{{this.schoolAppra.term_id}}</td>
           <td>{{this.schoolAppra.sch_appra_name}}</td>
           <td>{{this.schoolAppra.html}}</td>
@@ -48,7 +50,7 @@
           </td>
         </tr>
         <tr>
-          <td>评价(优点缺点)</td>
+          <td height="100px">评价(优点缺点)</td>
           <td colspan="9">
             {{this.schoolAppra.content}}
           </td>
@@ -56,21 +58,22 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="转正评价" name="second">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0">
+      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2">项目</td>
-          <td rowspan="2">员工部门</td>
-          <td rowspan="2">员工职务</td>
-          <td rowspan="2">评价人</td>
+          <td rowspan="2" width="120px" height="80px">项目</td>
+          <td rowspan="2" width="100px"  height="80px">员工部门</td>
+          <td rowspan="2" width="100px"  height="80px">员工职务</td>
+          <td rowspan="2" width="100px"  height="80px">评价人</td>
           <td colspan="5">评价分项</td>
-          <td rowspan="2">整体评价分数</td>
+          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td>能力</td><td>积极性</td><td>沟通交流</td><td>人品</td><td>性格</td>
+          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
+          <td width="80px">人品</td><td width="80px">性格</td>
         </tr>
-        <tr><td>工作评分</td>
-          <td>{{this.deptAndEmpAppra.dname}}</td>
-          <td>{{this.deptAndEmpAppra.job}}</td>
+        <tr><td height="80px">工作评分</td>
+          <td >{{this.deptAndEmpAppra.dname}}</td>
+          <td >{{this.deptAndEmpAppra.job}}</td>
           <td>{{this.deptAndEmpAppra.dept_appra_name}}</td>
           <td>{{this.deptAndEmpAppra.ability}}</td>
           <td>{{this.deptAndEmpAppra.activity}}</td>
@@ -97,7 +100,7 @@
           </td>
         </tr>
         <tr>
-          <td >评价(优点缺点)</td>
+          <td height="100px">评价(优点缺点)</td>
           <td colspan="9">
             {{this.deptAndEmpAppra.estimatedfirst}}
           </td>
@@ -106,19 +109,20 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="一年评价" name="third">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0">
+      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2">项目</td>
-          <td rowspan="2">员工部门</td>
-          <td rowspan="2">员工职务</td>
-          <td rowspan="2">评价人</td>
-          <td colspan="5">评价分项</td>
-          <td rowspan="2">整体评价分数</td>
+          <td rowspan="2" width="120px" height="80px">项目</td>
+          <td rowspan="2" width="100px" height="80px">员工部门</td>
+          <td rowspan="2" width="100px" height="80px">员工职务</td>
+          <td rowspan="2" width="100px" height="80px">评价人</td>
+          <td colspan="5" >评价分项</td>
+          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td>能力</td><td>积极性</td><td>沟通交流</td><td>人品</td><td>性格</td>
+          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
+          <td width="80px">人品</td><td width="80px">性格</td>
         </tr>
-        <tr><td>工作评分</td>
+        <tr><td height="80px">工作评分</td>
           <td>{{this.deptAppraToOne.dname}}</td>
           <td>{{this.deptAppraToOne.job}}</td>
           <td>{{this.deptAppraToOne.dept_appra_name}}</td>
@@ -147,7 +151,7 @@
           </td>
         </tr>
         <tr>
-          <td >评价(优点缺点)</td>
+          <td height="100px">评价(优点缺点)</td>
           <td colspan="9">
             {{this.deptAppraToOne.estimatedone}}
           </td>
@@ -156,19 +160,20 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="两年评价" name="fourth">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0">
+      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2">项目</td>
-          <td rowspan="2">员工部门</td>
-          <td rowspan="2">员工职务</td>
-          <td rowspan="2">评价人</td>
+          <td rowspan="2" width="120px" height="80px">项目</td>
+          <td rowspan="2" width="100px" height="80px">员工部门</td>
+          <td rowspan="2" width="100px" height="80px">员工职务</td>
+          <td rowspan="2" width="100px" height="80px">评价人</td>
           <td colspan="5">评价分项</td>
-          <td rowspan="2">整体评价分数</td>
+          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td>能力</td><td>积极性</td><td>沟通交流</td><td>人品</td><td>性格</td>
+          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
+          <td width="80px">人品</td><td width="80px">性格</td>
         </tr>
-        <tr><td>工作评分</td>
+        <tr><td height="80px">工作评分</td>
           <td>{{this.deptAppraToTwo.dname}}</td>
           <td>{{this.deptAppraToTwo.job}}</td>
           <td>{{this.deptAppraToTwo.dept_appra_name}}</td>
@@ -197,7 +202,7 @@
           </td>
         </tr>
         <tr>
-          <td >评价(优点缺点)</td>
+          <td height="100px">评价(优点缺点)</td>
           <td colspan="9">
             {{this.deptAppraToTwo.estimatedtwo}}
           </td>
@@ -206,19 +211,20 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="三年评价" name="fifth">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0">
+      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2">项目</td>
-          <td rowspan="2">员工部门</td>
-          <td rowspan="2">员工职务</td>
-          <td rowspan="2">评价人</td>
-          <td colspan="5">评价分项</td>
-          <td rowspan="2">整体评价分数</td>
+          <td rowspan="2" width="120px" height="80px">项目</td>
+          <td rowspan="2" width="100px" height="80px">员工部门</td>
+          <td rowspan="2" width="100px" height="80px">员工职务</td>
+          <td rowspan="2" width="100px" height="80px">评价人</td>
+          <td colspan="5" >评价分项</td>
+          <td rowspan="2" width="200" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td>能力</td><td>积极性</td><td>沟通交流</td><td>人品</td><td>性格</td>
+          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
+          <td width="80px">人品</td><td width="80px">性格</td>
         </tr>
-        <tr><td>工作评分</td>
+        <tr><td height="80px">工作评分</td>
           <td>{{this.deptAppraToThree.dname}}</td>
           <td>{{this.deptAppraToThree.job}}</td>
           <td>{{this.deptAppraToThree.dept_appra_name}}</td>
@@ -247,7 +253,7 @@
           </td>
         </tr>
         <tr>
-          <td >评价(优点缺点)</td>
+          <td height="100px">评价(优点缺点)</td>
           <td colspan="9">
             {{this.deptAppraToThree.estimatedthird}}
           </td>
@@ -256,6 +262,7 @@
       </table>
     </el-tab-pane>
   </el-tabs>
+  </div>
 </template>
 <script>
   import axios from 'axios'
@@ -266,13 +273,12 @@
         value2: null,
         scoreColors: ['#97A5BF', '#F7BA2A', '#FF9900'],   // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
         texts:['极差','差','一般','良好','优秀'],
-        activeName: 'second',
+        activeName: 'first',
         schoolAppra:[],
         deptAndEmpAppra:[],
         deptAppraToOne:[],
         deptAppraToTwo:[],
         deptAppraToThree:[],
-        apprascore:3.2
       };
     },
     methods: {
@@ -303,3 +309,5 @@
     }
   };
 </script>
+<style scoped>
+</style>

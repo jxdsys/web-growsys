@@ -264,6 +264,7 @@
         this.$nextTick(() => {
           this.$refs['empform'].clearValidate()
         })
+        this.getBusyTerm();
         this.form = {};
         this.dialogTitle = "新增员工";
         this.dialogFormVisible = true;
@@ -272,6 +273,7 @@
         this.$nextTick(() => {
           this.$refs['empform'].clearValidate()
         })
+        this.getBusyTerm();
         this.form = {};
         this.dialogTitle = "编辑员工";
         //根据员工编号获取员工详细信息，展示到对话框
