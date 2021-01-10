@@ -1,8 +1,7 @@
 <template>
   <div>
-    <el-container>
+    <h2 align="center">重置密码</h2>
 
-      <el-main>
 
         <div align="left">
           <el-input v-model="listQuery.filter" placeholder="请输入用户姓名" style="width: 200px"></el-input>
@@ -66,10 +65,10 @@
           @current-change="handleCurrentChange"
         >
         </el-pagination>
-      </el-main>
+
 
       <el-footer>最终解释权归我所有</el-footer>
-    </el-container>
+
 
   </div>
 </template>

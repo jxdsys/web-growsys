@@ -1,15 +1,16 @@
 <template>
   <div>
-    <el-container>
+    <h2 align="center">学校评价人信息</h2>
 
-      <el-main>
 
-        <div align="left">
+
+
+        <div align="left" style="float: left">
           <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
           <el-button type="primary" @click="querySchAppra">查询</el-button>
         </div>
 
-        <div align="right">
+        <div align="right" style="float: right">
           <el-button type="primary" @click="showAdd">新增</el-button>
           <el-button type="primary" @click="delBatch">删除</el-button>
         </div>
@@ -25,7 +26,7 @@
                 <el-radio label="男" value="男" v-model="form.sex"></el-radio>
                 <el-radio label="女" value="女" v-model="form.sex"></el-radio>
             </el-form-item>
-            <el-form-item label="入职日期" :label-width="formLabelWidth" prop="hiredate">
+            <el-form-item label="入职日期" :label-width="formLabelWidth" prop="hiredate" >
               <el-date-picker
                 v-model="form.hiredate"
                 format="yyyy-MM-dd"
@@ -34,6 +35,7 @@
                 type="date"
                 placeholder="选择日期"
                 style="width: 350px"
+                @change="judgetime"
               >
               </el-date-picker>
             </el-form-item>
@@ -46,12 +48,12 @@
           </div>
         </el-dialog>
 
-
+        <div style="margin-top: 70px">
         <el-table
           :data="tableData"
           border
           stripe
-          height="360px"
+          height="335px"
           style="width: 100%"
           @selection-change="handleSelectionChange">
 
@@ -81,7 +83,7 @@
           </el-table-column>
           <el-table-column
             prop="hiredate"
-            label="入职日期" align="center">
+            label="入职日期" align="center" >
           </el-table-column>
           <el-table-column
             prop="state"
@@ -108,10 +110,10 @@
           @current-change="handleCurrentChange"
         >
         </el-pagination>
-      </el-main>
+
 
       <el-footer>最终解释权归我所有</el-footer>
-    </el-container>
+        </div>
 
   </div>
 </template>
@@ -122,6 +124,15 @@
   export default {
     name: "SchAppra",
     data() {
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入'));
+        } else if (value >=this.getdatatime()) {
+          callback(new Error('选中时间不得大于当前时间!'));
+        } else {
+          callback();
+        }
+      };
       return {
         sname: "",//存储用户名
         //表格分页查询等相关数据
@@ -151,6 +162,7 @@
           hiredate: "",
           state: ""
         },
+        curtime:"",
         formLabelWidth: "150px",
         deptList: [],
         rules: {
@@ -160,8 +172,12 @@
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
           ],
-          hiredate:[
-            {required: true, message: '请输入入职日期', trigger: 'blur'}
+          // hiredate:[
+          //   {required: true, message: '请输入入职日期', trigger: 'blur'}
+          // ],
+          hiredate: [
+             {required: true, message: '请输入入职日期', trigger: 'blur'},
+            { validator: validatePass2, trigger: 'blur' }
           ]
         },
         //被选中的员工信息
@@ -215,12 +231,12 @@
         this.$refs["schform"].validate((valid) => {
           if (valid) {
             axios.post("/addSch", this.form).then(res => {
-              if (res.data == "success") {
+              if (res.data != "") {
                 this.form = {};
                 this.dialogFormVisible = false;
                 this.getEmps();
                 this.$message({
-                  message: this.dialogTitle + "成功",
+                  message: this.dialogTitle + "成功，" + "新增学校评价人的id是："+res.data,
                   type: "success"
                 })
               } else {
@@ -264,6 +280,11 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {//确定
+          //alert(rowData.state)
+          if (rowData.state == "忙碌") {
+            alert("该教师授课中，无法删除")
+            return;
+          }
           axios.get("/delSch/" + rowData.sch_appra_id).then(res => {
             if (res.data == "success") {
               this.getEmps();
@@ -330,6 +351,14 @@
           });
         });
       },
+      getdatatime(){//默认显示今天
+        this.curtime= new Date();
+        var year=this.curtime.getFullYear();
+        var month= this.curtime.getMonth()+1<10 ? "0"+(this.curtime.getMonth()+1) : this.curtime.getMonth()+1;
+        var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
+        return year+"-"+month+"-"+day;
+      },
+
     },
 
 
@@ -341,6 +370,8 @@
       this.getEmps();
       //从sessionStorage中获取用户名
       this.uname = sessionStorage.getItem("uname");
+      //获取系统当前时间
+      this.getdatatime();
     },
 
   }

@@ -1,115 +1,136 @@
 <template>
   <div>
-    <el-container>
 
-      <el-main>
+    <h2 align="center" style="margin-top: auto">学校学生信息</h2>
+    <div style="float: right">
+      <el-select clearable v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 118px" @change="clickTerm($event)">
+        <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
+      </el-select>
+    </div>
 
-        <div align="left">
-          <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
-          <el-button type="primary" @click="querySchAppra">查询</el-button>
-        </div>
+    <div align="left">
+      <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
+      <el-button type="primary" @click="querySchAppra">查询</el-button>
+    </div>
 
 
-        <el-table
-          :data="tableData"
-          border
-          stripe
-          height="360px"
-          style="width: 100%"
-          @selection-change="handleSelectionChange">
-          <el-table-column
-            type="index"
-            label="序号"
-            width="50"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            prop="dname"
-            label="姓名"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            prop="dcrib"
-            label="性别"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            prop="dcrib"
-            label="学校"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            prop="dcrib"
-            label="籍贯"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            label="培训期间测试成绩"
-            align="center"
+    <el-table
+      :data="tableData"
+      border
+      stripe
+      height="360px"
+      style="width: 100%"
+    >
+      <el-table-column
+        type="index"
+        label="序号"
+        width="50"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="stuname"
+        label="姓名"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="sex"
+        label="性别"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="school"
+        label="学校"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="natives"
+        label="籍贯"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        label="培训期间测试成绩"
+        align="center"
+      >
+        <el-table-column
+          prop="html"
+          label="HTML笔试"
+          align="center"
+         >
+        </el-table-column>
+        <el-table-column
+          prop="oracle"
+          label="oracle笔试"
+          align="center"
           >
-            <el-table-column
-              prop="province"
-              label="HTML笔试"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              prop="city"
-              label="oracle笔试"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="js笔试"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="java笔试"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="java高级笔试"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="L1面试"
-              width="50">
-            </el-table-column>
-          </el-table-column>
+        </el-table-column>
+        <el-table-column
+          prop="js"
+          label="js笔试"
+          align="center"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="java"
+          label="java笔试"
+          align="center"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="superjava"
+          label="java高级"
+          align="center"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="l1"
+          label="L1面试"
+          align="center"
+          >
+        </el-table-column>
+      </el-table-column>
 
-          <el-table-column
-            prop="dcrib"
-            label="学校评价"
-            align="center">
-          </el-table-column>
-
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="100" header-align="center">
-            <template slot-scope="scope">
-              <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button type="text" @click="handleDelete(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          background
-          :current-page.sync="page.currentPage"
-          :page-sizes="page.sizes"
-          :page-size="this.listQuery.limit"
-          :total="total"
-          layout="prev,pager,next,sizes,jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+      <el-table-column
+        fixed="right"
+        label="整体评价分数"
+        align="center"
+        prop="apprascore"
+        width="150px"
         >
-        </el-pagination>
-      </el-main>
+        <template slot-scope="{row}">
+          <el-rate v-if="row.apprascore > 0"
+                   v-model="row.apprascore"
+                   disabled
+                   text-color="#101010"
+                   :colors="scoreColors"
+          >
+          </el-rate>
+          <el-rate v-else
+                   v-model="row.apprascore"
+                   disabled
+                   show-score
+                   text-color="#101010"
+                   score-template="暂无评分"
+                   :colors="scoreColors"
+          >
+          </el-rate>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      background
+      :current-page.sync="page.currentPage"
+      :page-sizes="page.sizes"
+      :page-size="this.listQuery.limit"
+      :total="total"
+      layout="prev,pager,next,sizes,jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    >
+    </el-pagination>
 
-      <el-footer>最终解释权归我所有</el-footer>
-    </el-container>
+
+    <el-footer>最终解释权归我所有</el-footer>
+
 
   </div>
 </template>
@@ -118,20 +139,28 @@
   import axios from 'axios'
 
   export default {
+
     name: "SchAppra",
     data() {
       return {
+        //value2: null,
+        scoreColors: ['#97A5BF', '#F7BA2A', '#FF9900'],   // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+        //texts:['极差','差','一般','良好','优秀'],
         sname: "",//存储用户名
         //表格分页查询等相关数据
         tableData: [],
+        apprascore:"",
         page: {
           currentPage: 1,//当前页码
           sizes: [2, 4, 6, 8, 10],
         },
+        termList:[],
         listQuery: {//初始查询条件
           limit: 2,
           page: 1,
-          filter: ""
+          filter: "",
+          termid: "",
+          userName: ""
         },
         //总条数
         total: 0,
@@ -151,17 +180,6 @@
         },
         formLabelWidth: "150px",
         deptList: [],
-        rules: {
-          schAppraName: [
-            {required: true, message: '请输入姓名', trigger: 'blur'}
-          ],
-          sex: [
-            {required: true, message: '请输入性别', trigger: 'blur'}
-          ],
-          hiredate:[
-            {required: true, message: '请输入入职日期', trigger: 'blur'}
-          ]
-        },
         //被选中的员工信息
         checkData: []
       }
@@ -171,12 +189,16 @@
         //这是用于获取全部的员工数据
         // axios.get("/getEmps/"+this.listQuery.limit+"/"+this.listQuery.page).then(res => {
         //参数过多的时，推荐使用post方式传参
-        axios.post("/getEmps", this.listQuery).then(res => {
+        axios.post("/getSchAllStu", this.listQuery).then(res => {
           //res.data返回的是json对象数组
-          this.tableData = res.data.schAppra;
+          this.tableData = res.data.schStuAppra;
           this.total = res.data.total;
           //this.page.currentPage=1;//默认显示第一页
         })
+      },
+      clickTerm(data) {
+        this.listQuery.termid = data;
+        this.getEmps();
       },
       querySchAppra: function () {
         //设置传递到后台
@@ -202,132 +224,22 @@
         this.listQuery.page = val;
         this.getEmps();
       },
-      //新增对话框中的取消按钮事件
-      closeDlog: function () {
-        //清空数据
-        this.form = {};
-        //关闭对话框
-        this.dialogFormVisible = false
-      },
-      addEmp: function () {
-        this.$refs["schform"].validate((valid) => {
-          if (valid) {
-            axios.post("/addSch", this.form).then(res => {
-              if (res.data == "success") {
-                this.form = {};
-                this.dialogFormVisible = false;
-                this.getEmps();
-                this.$message({
-                  message: this.dialogTitle + "成功",
-                  type: "success"
-                })
-              } else {
-                this.form = {};
-                this.dialogFormVisible = false;
-                this.getEmps();
-                this.$message({
-                  message: this.dialogTitle + "失败",
-                  type: "error"
-                })
-              }
-            })
-          }
+
+      //获取某个评价人下的班期信息
+      getTerm:function () {
+        //alert(this.listQuery.userName)
+        axios.get("/getSomeTerms/"+this.listQuery.userName).then(res => {
+          //alert(this.listQuery.userName)
+          this.termList = res.data.data
         })
 
       },
-      showAdd: function () {
-        // this.getDepts();
-        this.form = {};
-        this.dialogTitle = "新增";
-        this.dialogFormVisible = true;
-        this.$refs.schform.clearValidate();
-
-      },
-      handleEdit: function (rowData) {
-
-        this.form = {};
-        this.dialogTitle = "编辑";
-
-        //根据员工编号获取员工详细信息，展示到对话框
-        axios.get("/getSchById/" + rowData.sch_appra_id).then(res => {
-
-          this.form = res.data
-          this.dialogFormVisible = true;
-        })
-        this.$refs.schform.clearValidate();
-      },
-      handleDelete: function (rowData) {
-        this.$confirm('确认删除所选记录吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {//确定
-          axios.get("/delSch/" + rowData.sch_appra_id).then(res => {
-            if (res.data == "success") {
-              this.getEmps();
-              this.page.currentPage = 1;//删除后默认显示第一页
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            } else {
-              this.$message({
-                type: 'error',
-                message: '删除失败!'
-              });
-            }
-          })
-        })
-      },
-
-      handleSelectionChange: function (val) {
-        //被选中的数据：行对象数组
-        this.checkData = val;
-
-      },
-      delBatch: function () {
-        if (this.checkData.length == 0) {
-          this.$message({
-            message: "请选择要删除的记录",
-            type: "warning"
-          });
+      updateTermAndTeacherState:function () {
+        axios.get("/getUpdState/"+this.listQuery.userName).then(res => {
+          //alert(this.listQuery.userName)
           return;
-        }
-        this.$confirm('确认删除所选记录吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {//确定
-          var arrEmpnos = [];
-          for (var i = 0; i < this.checkData.length; i++) {
-            if (this.checkData[i].state == "忙碌") {
-              alert("含授课中的教师，无法删除");
-              return;
-            }
-            arrEmpnos[i] = this.checkData[i].sch_appra_id;
-          }
-          axios.post("/delBatchSch", arrEmpnos).then(res => {
-            if (res.data == "success") {
-              this.getEmps();
-              this.page.currentPage = 1;//删除后默认显示第一页
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            } else {
-              this.$message({
-                type: 'error',
-                message: '删除失败!'
-              });
-            }
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
+        })
+      }
     },
 
 
@@ -335,10 +247,17 @@
       //alert("vue实例已经创建完成")
     },
     mounted() {
+      this.listQuery.userName = sessionStorage.getItem("userName")
+      this.updateTermAndTeacherState()
       //查询数据
       this.getEmps();
       //从sessionStorage中获取用户名
-      this.uname = sessionStorage.getItem("uname");
+      //this.uname = sessionStorage.getItem("uname");
+      //获取班期
+      this.getTerm();
+     // this.listQuery.userName = sessionStorage.getItem("userName")
+      //alert(this.listQuery.userName)
+
     },
 
   }

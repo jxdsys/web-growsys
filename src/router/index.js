@@ -14,6 +14,8 @@ import SchAllStu from '@/components/SchAllStu'
 import uppwd from '@/components/uppwd'
 import studentInfo from '@/components/studentInfo'
 import DeptAppraSetScore from '@/components/DeptAppraSetScore'
+import Tomark from '@/components/Tomark'
+import Distridept from '@/components/Distridept'
 Vue.use(Router);
 
 export default new Router({
@@ -40,6 +42,8 @@ export default new Router({
         {path:'/uppwd',component:uppwd},
         {path:'/studentInfo',component:studentInfo},
         {path:'/markemp',component:DeptAppraSetScore},
+        {path:'/Tomark',component:Tomark},
+        {path:'/Distridept',component:Distridept},
       ]
     },
 
