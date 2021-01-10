@@ -16,7 +16,6 @@ import studentInfo from '@/components/studentInfo'
 import DeptAppraSetScore from '@/components/DeptAppraSetScore'
 import Tomark from '@/components/Tomark'
 import Distridept from '@/components/Distridept'
-import SchAllStu from '@/components/SchAllStu'
 import myinfo from '@/components/myinfo'
 import myscore from '@/components/myscore'
 Vue.use(Router);
@@ -45,10 +44,7 @@ export default new Router({
         {path:'/AdminTerm',component:AdminTerm},
         {path:'/SchAllStu',component:SchAllStu},
         {path:'/myinfo',component:myinfo},
-        {path:'/myscore',component:myscore}
-,
-        {path:'/uppwd',component:uppwd},
-        {path:'/studentInfo',component:studentInfo},
+        {path:'/myscore',component:myscore},
         {path:'/markemp',component:DeptAppraSetScore},
         {path:'/Tomark',component:Tomark},
         {path:'/Distridept',component:Distridept},

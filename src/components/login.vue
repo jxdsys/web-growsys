@@ -53,6 +53,7 @@
              if (res.status=="200"){
                  //将用户名存储到sessionStorage中
                  sessionStorage.setItem("userName",this.form.name)
+
                  sessionStorage.setItem("role",res.data.data.role)
                  //跳转页面
                 this.$router.push({path:'/Homes'});
