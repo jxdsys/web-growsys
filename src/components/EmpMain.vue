@@ -124,7 +124,7 @@
                 <td colspan="9">
                   <el-form-item prop="estimated">
                     <el-input type="textarea"
-                              placeholder="请输入评价"
+                              placeholder="评价"
                               show-word-limit
                               style="outline: none"
                               height="100%"
