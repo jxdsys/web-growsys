@@ -16,6 +16,9 @@ import studentInfo from '@/components/studentInfo'
 import DeptAppraSetScore from '@/components/DeptAppraSetScore'
 import Tomark from '@/components/Tomark'
 import Distridept from '@/components/Distridept'
+import SchAllStu from '@/components/SchAllStu'
+import myinfo from '@/components/myinfo'
+import myscore from '@/components/myscore'
 Vue.use(Router);
 
 export default new Router({
@@ -31,6 +34,8 @@ export default new Router({
       component:Homes,
       redirect:"/welcome",
       children:[
+        {path:'/studentInfo',component:studentInfo},
+        {path:'/uppwd',component:uppwd},
         {path:'/welcome',component:welcome},
         {path:'/dept',component:Dept},
         {path:'/deptinfo',component:DeptAppra},
@@ -39,6 +44,9 @@ export default new Router({
         {path:'/Repwd',component:Repwd},
         {path:'/AdminTerm',component:AdminTerm},
         {path:'/SchAllStu',component:SchAllStu},
+        {path:'/myinfo',component:myinfo},
+        {path:'/myscore',component:myscore}
+,
         {path:'/uppwd',component:uppwd},
         {path:'/studentInfo',component:studentInfo},
         {path:'/markemp',component:DeptAppraSetScore},
