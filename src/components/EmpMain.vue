@@ -56,11 +56,11 @@
             <el-menu-item index="3" @click="toMark3" :disabled="disabled3">两年评价</el-menu-item>
             <el-menu-item index="4" @click="toMark4"  :disabled="disabled4">三年评价</el-menu-item>
           </el-menu>
-
-          <el-form :model="form" ref="empForm">
-            <table border="1" style="border: 1px solid" :model="baseData1">
+<!--          <el-input v-model="form.stem" class="paperview-input-text" />-->
+          <el-form :model="form" ref="empForm" :rules="useInfoFormRules" >
+            <table border="1" style="border: 1px solid" :model="baseData1" >
               <tr>
-                <td rowspan="2">项目</td>
+                <td rowspan="2" style="height: 70px">项目</td>
                 <td rowspan="2">员工部门</td>
                 <td rowspan="2">员工职务</td>
                 <td rowspan="2">评价人</td>
@@ -75,21 +75,65 @@
                 <td>性格</td>
               </tr>
               <tr>
-                <td>工作评分</td>
+                <td >工作评分</td>
                 <td>{{this.baseData1.dname}}</td>
                 <td>{{this.baseData1.job}}</td>
                 <td>{{this.baseData1.dept_appra_name}}</td>
-                <td><input v-model="form.ability" type="text"/></td>
-                <td><input v-model="form.activity" type="text"/></td>
-                <td><input v-model="form.communication" type="text"/></td>
-                <td><input v-model="form.moralQuality" type="text"/></td>
-                <td><input v-model="form.disposition" type="text"/></td>
-                <td><input v-model="form.score" type="text"/></td>
+                <td>
+                  <div style="margin-top: 20px"><el-form-item  prop="ability">
+                    <el-input v-model.number="form.ability" type="text" :readonly="readonly" class="paperview-input-text" />
+                  </el-form-item></div>
+
+                </td>
+                <td>
+                  <div style="margin-top: 20px">
+                  <el-form-item  prop="activity">
+                    <el-input v-model.number="form.activity" type="text" :readonly="readonly" class="paperview-input-text" />
+                  </el-form-item></div>
+                </td>
+                <td>
+                  <div style="margin-top: 20px">
+                  <el-form-item  prop="communication">
+                    <el-input v-model.number="form.communication" type="text" :readonly="readonly" class="paperview-input-text" />
+                  </el-form-item></div>
+
+                </td>
+                <td>
+                  <div style="margin-top: 20px">
+                  <el-form-item  prop="moralQuality">
+                    <el-input v-model.number="form.moralQuality" type="text" :readonly="readonly" class="paperview-input-text" />
+                  </el-form-item>
+                  </div>
+                </td>
+                <td>
+                  <div style="margin-top: 20px">
+                  <el-form-item  prop="disposition">
+                    <el-input v-model.number="form.disposition" type="text" :readonly="readonly" class="paperview-input-text" />
+                  </el-form-item></div>
+                </td>
+                <td>
+                  <div style="margin-top: 20px">
+                  <el-form-item  prop="score">
+                    <el-input v-model.number="form.score" type="text" :readonly="readonly" class="paperview-input-text" />
+                  </el-form-item>
+                  </div>
+                </td>
               </tr>
-              <tr>
-                <td>评价(优点缺点)</td>
+              <tr style="height: 80px">
+                <td>评价(优点和缺点)</td>
                 <td colspan="9">
-                  <textarea rows="4" cols="90" style="border: 0" v-model="form.estimated"></textarea>
+                  <el-form-item prop="estimated">
+                    <el-input type="textarea"
+                              placeholder="请输入评价"
+                              show-word-limit
+                              style="outline: none"
+                              height="100%"
+                              border="0"
+                              padding="0"
+                              v-model="form.estimated"
+                              :readonly="readonly"
+                              class="paperview-input-textarea" />
+                  </el-form-item>
                 </td>
               </tr>
               <tr>
@@ -248,16 +292,56 @@
         //查询表信息
         name: 'EmpMain',
         data() {
+            var checkAbility = (rule, value, callback) => {
+                    if (!value) {
+                        return callback(new Error('不能为空'));
+                    }
+                    setTimeout(() => {
+                        if (!Number.isInteger(value)) {
+                            callback(new Error('请输入数字'));
+                        } else {
+                            if (100<value || value < 1) {
+                                callback(new Error('评分为百分制'));
+                            } else {
+                                callback();
+                            }
+                        }
+                    }, 1000);
+                };
+            var checkScore = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('不能为空'));
+                }
+                setTimeout(() => {
+                    if (!Number.isInteger(value)) {
+                        callback(new Error('请输入数字'));
+                    } else {
+                        if (5<value || value < 1) {
+                            callback(new Error('评分为5分制'));
+                        } else {
+                            callback();
+                        }
+                    }
+                }, 1000);
+            };
             return {
+                empForm:{
+                    ability:"",
+                    score:"",
+                    estimated: "",
+                    activity: "",
+                    communication: "",
+                    moralQuality: "",
+                    disposition: "",
+                },
                 dept: "",
                 asd:"评分",
+                readonly:false,
                 disabled1: true,
                 disabled2: true,
                 disabled3: true,
                 disabled4: true,
                 disabled5: false,
-                //入职日期
-                hiredate:"",
                 //当前时间
                 curtime:"",
                 //日期的差值
@@ -284,7 +368,7 @@
                 dialogFormVisible: false,
                 form: {
                     dateid: "",
-                    stuid: sessionStorage.getItem("stuid"),
+                    stuid: "",
                     estimated: "",
                     ability: "",
                     activity: "",
@@ -318,6 +402,8 @@
                     content: "",
                     //相片
                     pictureAdd: "",
+                    //入职日期
+                    hiredate:"",
                 },
                 baseData1: {
                     dname: "",
@@ -325,7 +411,32 @@
                     dept_appra_name: ""
                 },
                 activeIndex: "",
-            }
+                useInfoFormRules:{},
+
+                useInfo:{
+                    estimated:[
+                        {required: true, message: '不能为空',  trigger: 'blur'}
+                    ],
+                    ability: [
+                        { validator: checkAbility, trigger: 'blur' }
+                    ],
+                    activity:[
+                        { validator: checkAbility, trigger: 'blur' }
+                    ],
+                    communication:[
+                        { validator: checkAbility, trigger: 'blur' }
+                    ],
+                    moralQuality:[
+                        { validator: checkAbility, trigger: 'blur' }
+                    ],
+                    disposition:[
+                        { validator: checkAbility, trigger: 'blur' }
+                    ],
+                    score:[
+                        { validator: checkScore, trigger: 'blur' }
+                    ]
+                }
+            };
         },
         methods: {
             //查询所有信息
@@ -383,33 +494,30 @@
             },
             //查询员工分数信息
             selectEmpInfo:function(rowData){
-                //this.disabledfun()
+                this.clearUseRules()
+                //this.$refs[empForm].resetFields();
+                this.useInfoFormRules={}
+                //this.useInfoFormRules=[]
+                this.readonly=true;
+                this.form = {};
+                this.form.stuid="";
                 this.FormTitle = rowData.stuname + "的成绩"
-                //this.form.desc = "第三年评分不能为零"
-                //this.dialogFormVisible = true
                 //获取员工个人的详细信息
                 axios.post("/getEmpInfoById", rowData.stuid).then(res => {
-                    //this.form =res.data
                     this.baseData = res.data
-                    //this.baseData1=res.data
-                })
-                //this.dialogFormVisible = true
+                });
                 //获取评价人
                 axios.post("/getEmpDeptInfoById", rowData.stuid).then(res => {
-                    //this.form =res.data
                     this.baseData1 = res.data
                 })
-               // this.dialogFormVisible = true
                 this.form.stuid = rowData.stuid;
                 sessionStorage.setItem("stuid",rowData.stuid)
-                //this.dialogFormVisible = true
                 this.disnoabledfun()
+                this.getScore(0)
+                this.activeIndex ="1";
                 this.dialogFormVisible = true
-               // this.from.dateid = 0
-                //this.getScore(0)
-                //this.dialogFormVisible = true
 
-            }, //获取分数信息
+            }, //从后台获取分数信息
             getScore:function(timeida){
                 this.openform()
                 axios.get("/selectEmpScore/"+this.form.stuid+"/"+timeida).then(res => {
@@ -435,104 +543,181 @@
             },
             //打开评分页面
             setMark: function (rowData) {
-                this.disabledfun()
 
+                this.useInfoFormRules=this.useInfo
+                //this.useInfoFormRules= useInfoFormRules
+                this.clearUseRules()
+                this.readonly=false;
+                this.form = {};
+                this.form.stuid="";
+                //this.hiredate="";
+                //this.openform()
+                this.disabledfun();
+                this.baseData={}
                 this.FormTitle = rowData.stuname + "的成绩"
-                //this.form.desc = "第三年评分不能为零"
-                // this.dialogFormVisible = true
                 //获取员工个人的详细信息
                 axios.post("/getEmpInfoById", rowData.stuid).then(res => {
-                    //this.form =res.data
-                    this.baseData = res.data
+                    this.baseData = res.data;
                     //获取入职日期
-                    this.hiredate = res.data.hiredate
-                    sessionStorage.setItem("hiredate",res.data.hiredate)
-                    //this.baseData1=res.data
-                })
+                    //this.hiredate = res.data.hiredate;
+                    //sessionStorage.setItem("hiredate",res.data.hiredate)
+                });
                 //获取评价人
                 axios.post("/getEmpDeptInfoById", rowData.stuid).then(res => {
-                    //this.form =res.data
                     this.baseData1 = res.data
-                })
+                });
                 this.form.stuid = rowData.stuid;
-                sessionStorage.setItem("stuid",rowData.stuid)
+                sessionStorage.setItem("stuid",rowData.stuid);
                 //查询成绩(判断是否需要评分)
                 //添加一个判断，事件间隔大于三个月才可以进行评分
-                this.hiredate=sessionStorage.getItem("hiredate")
-                //alert(this.hiredate-this.curtime)
+                //this.hiredate=this.baseData.hiredate
+                //alert(rowData.hiredate)
+                //this.hiredate=sessionStorage.getItem("hiredate");
+                //使用了上一次查出来的时间
                 this.curtime = new Date();
-                var empdate = new Date(this.hiredate);
+                var empdate = new Date(rowData.hiredate);
                 this.num = (this.curtime - empdate)/(1000*3600*24);//天数，一天算一年
                 //根据该数值对能评价的人的地方进行释放，自动释放
-                //alert(this.num)
                 if (rowData.score0 == 0 || rowData.score0 == null) {
-                    this.disabled1 = false
-                    this.form.dateid = 0;
-                    this.activeIndex = "1";
+                    if(this.num > 90){
+                        this.disabled1 = false;
+                        this.form.dateid = 0;
+                        this.activeIndex = "1";
+                    }else{
+                        this.$message({
+                            message: '还没有到达评价日期，无法评价',
+                            type: 'warning'
+                        });
+                        //alert("还没有到达转正日期，无法评价")
+                        return
+                    }
                 } else {
                     if (rowData.score1 == 0 || rowData.score1 == null) {
-                        this.disabled2 = false
-                        this.form.dateid = 1;
-                        this.activeIndex = "2";
+                        if(this.num > 365){
+                            this.disabled2 = false
+                            this.form.dateid = 1;
+                            this.activeIndex = "2";
+                        }else{
+                            this.$message({
+                                message: '还没有到达评价日期，无法评价',
+                                type: 'warning'
+                            });
+                            return
+                        }
                     } else {
                         if (rowData.score2 == 0 || rowData.score2 == null) {
-                            this.disabled3 = false
-                            this.form.dateid = 2;
-                            this.activeIndex = "3";
+                            if(this.num > 730){
+                                this.disabled3 = false
+                                this.form.dateid = 2;
+                                this.activeIndex = "3";
+                            }else{
+                                this.$message({
+                                    message: '还没有到达评价日期，无法评价',
+                                    type: 'warning'
+                                });
+                                return
+                            }
                         } else {
                             if (rowData.score3 == 0 || rowData.score3 == null) {
-                                this.disabled4 = false
-                                this.form.dateid = 3;
-                                this.activeIndex = "4";
+                                if(this.num > 1095){
+                                    this.disabled4 = false
+                                    this.form.dateid = 3;
+                                    this.activeIndex = "4";
+                                }else{
+                                    this.$message({
+                                        message: '还没有到达评价日期，无法评价',
+                                        type: 'warning'
+                                    });
+                                    return
+                                }
                             }
                         }
                     }
                 }
-                //this.hiredate=sessionStorage.getItem("hiredate")
-                //alert(this.hiredate)
-                this.dialogFormVisible = true
+                 //message: '各位评价人请谨慎打分，一旦提交不可修改',
+                this.$confirm('该操作为评分操作，一旦提交分数则不可以修改, 是否继续评分?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.dialogFormVisible = true
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });
+                });
+                //this.dialogFormVisible = true
             },
+            //清空和赋值stuid
             openform:function(){
                this.form={};
                this.form.stuid =sessionStorage.getItem("stuid")
             },
             //保存数据
             updateScore: function () {
+                this.$refs["empForm"].validate((valid) => {
+                    if (valid) {
+                        //alert('submit!');
+
                 axios.post("/updateScore", this.form).then(res => {
                     if (res.data == "success") {
                         this.getAllEmpInfo()
                         if (this.form.dateid == 0) {
-                            this.disabled2 = false;
                             this.disabled1 = true;
-                            this.openform()
-                            this.form.dateid =1;
-                            this.activeIndex ="2";
-                            this.$message({
-                                message: "转正评价成功",
-                                type: "success"
-                            });
-
+                            if(this.num<365){
+                                this.$message({
+                                    message: "转正评价成功，一年评价还无法进行",
+                                    type: "success"
+                                });
+                                this.dialogFormVisible = false
+                            }else{
+                                this.disabled2 = false;
+                                this.openform()
+                                this.form.dateid =1;
+                                this.activeIndex ="2";
+                                this.$message({
+                                    message: "转正评价成功",
+                                    type: "success"
+                                });
+                            }
                         }else if (this.form.dateid == 1) {
-                            this.disabled3 = false;
                             this.disabled2 = true;
-                            this.openform()
-                            this.form.dateid =2;
-                            this.activeIndex ="3";
-                            this.$message({
-                                message: "一年评价成功",
-                                type: "success"
-                            });
-
+                            if(this.num<730){
+                                this.$message({
+                                    message: "一年评价成功，两年评价还无法进行",
+                                    type: "success"
+                                });
+                                this.dialogFormVisible = false
+                            }else{
+                                this.disabled3 = false;
+                                this.openform()
+                                this.form.dateid =2;
+                                this.activeIndex ="3";
+                                this.$message({
+                                    message: "一年评价成功",
+                                    type: "success"
+                                });
+                            }
                         }else if (this.form.dateid == 2) {
-                            this.disabled4 = false;
                             this.disabled3 = true;
-                            this.openform()
-                            this.form.dateid =3;
-                            this.activeIndex ="4";
-                            this.$message({
-                                message: "两年评价成功",
-                                type: "success"
-                            });
+                            if(this.num<1095){
+                                this.$message({
+                                    message: "两年评价成功，三年评价还无法进行",
+                                    type: "success"
+                                });
+                                this.dialogFormVisible = false
+                            }else{
+                                this.disabled4 = false;
+                                this.openform()
+                                this.form.dateid =3;
+                                this.activeIndex ="4";
+                                this.$message({
+                                    message: "两年评价成功",
+                                    type: "success"
+                                });
+                            }
+
                         }else if (this.form.dateid == 3) {
                             this.disabled4 = true;
                             this.form={}
@@ -544,13 +729,18 @@
                         }
                     } else {
                         this.form = {}
-                        this.form.stuid =sessionStorage.getItem("stuid");
+                        //this.form.stuid =sessionStorage.getItem("stuid");
                         this.$message({
                             message: "失败",
                             type: "warning"
                         });
                     }
                 })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
             //跳转到转正评价（也是默认的界面）
             toMark1:function(){
@@ -606,15 +796,23 @@
                 var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
                 return year+"-"+month+"-"+day;
             },
+            //清空表单眼影提示语句
+            clearUseRules:function () {
+                this.$nextTick(() => {
+                    this.$refs["empForm"].clearValidate()
+                })
+            },
+
             //关闭页面
             closeDlog: function () {
                 this.getAllEmpInfo()
+               // this.$refs[empForm].resetFields();
                 //清空数据
                 this.form = {};
-
-               // this.disabled5= true;
+                this.clearUseRules()
                 //关闭对话框
                 this.dialogFormVisible = false
+                //this.$refs[empForm].resetFields();
             },
         },
         mounted() {
@@ -622,7 +820,7 @@
             this.listQuery.userName = sessionStorage.getItem("userName")
             this.getDept()
             this.getAllEmpInfo()
-            this.from.stuid =sessionStorage.getItem("stuid");
+            //this.from.stuid =sessionStorage.getItem("stuid");
             this.getdatatime()
         }
     }
@@ -650,4 +848,34 @@
     text-align: center;
     border: white;
   }
+  el-input {
+    border: 0;
+    width: 65px;
+    height: 34px;
+    text-align: center;
+    border: white;
+  }
+  .paperview-input-text >>> .el-input__inner {
+    -webkit-appearance: none;
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    /*padding: 1%;*/
+
+    border: 0px;
+    width: 70px;
+    height:40px;
+  }
+  .paperview-input-textarea >>> .el-textarea__inner {
+    -webkit-appearance: none;
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    outline: none;
+    border: 0px;
+    width: 100%;
+  }
+
+
+
 </style>

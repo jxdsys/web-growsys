@@ -219,41 +219,52 @@
                 this.dialogFormVisible =false
             },
             //批量删除
-            delBatch:function(){
-                if (this.checkData.length == 0){
-                    this.$message({message:"请选中要删除的记录",type:"warning"})
-                    return
-                }
-                this.$confirm('该部门将被解散?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+            delBatch:function() {
+                this.$message({
+                    message: '部门无法进行批量删除',
                     type: 'warning'
-                }).then(() => {//确定
-                    var arrDeptids=[]
-                    for (var i=0;i<this.checkData.length;i++){
-                        arrDeptids[i]=this.checkData[i].deptid;
-                    }
-                    axios.post("/delDept", arrDeptids).then(res => {
-                        if (res.data == "success") {
-                            this.querys()
-                            this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                            });
-                        } else {
-                            this.$message({
-                                type: 'error',
-                                message: '删除失败!'
-                            });
-                        }
-                    })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                })
+                });
             },
+            //批量删除
+            // delBatch:function() {
+            //     if (this.checkData.length == 0){
+            //         this.$message({message:"请选中要删除的记录",type:"warning"})
+            //         return
+            //     }
+            //     this.$confirm('该部门将被解散?', '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'warning'
+            //     }).then(() => {//确定
+            //             this.$message({
+            //                  type: 'success',
+            //                   message: '删除成功!'
+            //              });
+            //         // var arrDeptids=[]
+            //         // for (var i=0;i<this.checkData.length;i++){
+            //         //     arrDeptids[i]=this.checkData[i].deptid;
+            //         // }
+            //         // axios.post("/delDept", arrDeptids).then(res => {
+            //         //     if (res.data == "success") {
+            //         //         this.querys()
+            //         //         this.$message({
+            //         //             type: 'success',
+            //         //             message: '删除成功!'
+            //         //         });
+            //         //     } else {
+            //         //         this.$message({
+            //         //             type: 'error',
+            //         //             message: '删除失败!'
+            //         //         });
+            //         //     }
+            //         // })
+            //     }).catch(() => {
+            //         this.$message({
+            //             type: 'info',
+            //             message: '已取消删除'
+            //         });
+            //     })
+            // },
             //单条删除
             del:function (rowData) {
                 this.$confirm('该部门将被解散?', '提示', {
@@ -261,19 +272,19 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {//确定
-                    var arrDeptids = [];
-                    arrDeptids[0] = rowData.deptid;
-                    axios.post("/delDept", arrDeptids).then(res => {
+                    //var arrDeptids = [];
+                   // arrDeptids[0] = rowData.deptid;
+                    axios.get("/delDept/"+rowData.deptid).then(res => {
                         if (res.data == "success") {
                             this.querys()
                             this.$message({
                                 type: 'success',
-                                message: '删除成功!'
+                                message: '解散成功!'
                             });
                         } else {
                             this.$message({
                                 type: 'error',
-                                message: '删除失败!'
+                                message: '解散失败,该部门还有员工!'
                             });
                         }
                     })

@@ -134,10 +134,10 @@
                     deptAppraName:[
                         {required: true, message: '请输入评价人姓名', trigger: 'blur'}
                     ] ,
-                    deptid:[
+                    jobid:[
                         {required: true, message: '请选择职务', trigger: 'blur'}
                     ],
-                    deptno:[
+                    deptid:[
                         {required: true, message: '请选择部门', trigger: 'blur'}
                     ]
                 }
@@ -218,12 +218,14 @@
                 this.$refs["deptAppraForm"].validate((valid) => {
                     if(valid){
                         axios.post("/addDeptAppra",this.form).then(res =>{
-                            if(res.data=="success"){
+                            if(res.data.status=="success"){
                                 this.form={};
                                 this.dialogFormVisible=false;
                                 this.getDeptAppra()
                                 if(this.isadd){
-                                    this.$message({message:"新增成功", type:"success"})
+                                    this.$message({
+                                        message:"新增成功,该用户用户名为"+res.data.id+"，密码为123" ,
+                                        type:"success"})
                                 }else{
                                     this.$message({message:"修改成功", type:"success"})
                                 }
@@ -249,7 +251,7 @@
                 //关闭对话框
                 this.dialogFormVisible =false
             },
-            //批量
+            //批量删除
             delBatch:function(){
                 if (this.checkData.length == 0){
                     this.$message({message:"请选中要删除的记录",type:"warning"})
