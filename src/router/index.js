@@ -43,13 +43,12 @@ export default new Router({
         {path:'/Repwd',component:Repwd},
         {path:'/AdminTerm',component:AdminTerm},
         {path:'/SchAllStu',component:SchAllStu},
-        {path:'/myinfo',component:myinfo},
         {path:'/myscore',component:myscore},
         {path:'/markemp',component:DeptAppraSetScore},
         {path:'/Tomark',component:Tomark},
+        {path:'/myinfo',component:myinfo},
         {path:'/Distridept',component:Distridept},
       ]
     },
-
   ]
 })

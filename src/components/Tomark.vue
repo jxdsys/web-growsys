@@ -70,47 +70,47 @@
               <td>学习评价</td>
               <td>
                 <el-form-item prop="termid" :label-width="formLabelWidth">
-                <el-input v-model="form.termid" autocomplete="off" style="width: 40px" align="center" disabled></el-input>
+                <el-input v-model="form.termid" autocomplete="off" class="paperview-input-text" disabled></el-input>
                 </el-form-item>
               </td>
-              <td>
+              <td style="width: 100px">
                 <el-form-item prop="sch_appra_name" :label-width="formLabelWidth">
-                <el-input v-model="form.sch_appra_name" autocomplete="off" style="width: 80px" align="center" disabled></el-input>
+                <el-input v-model="form.sch_appra_name" autocomplete="off"  class="paperview-input-text"  disabled></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="html">
-                <el-input v-model.number="form.html" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.html" autocomplete="off"  class="paperview-input-text"  align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="oracle">
-                <el-input v-model.number="form.oracle" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.oracle" autocomplete="off"   class="paperview-input-text"  align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="js">
-                <el-input v-model.number="form.js" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.js" autocomplete="off"   class="paperview-input-text"  align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="java">
-                <el-input v-model.number="form.java" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.java" autocomplete="off"   class="paperview-input-text"  align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="superjava">
-                <el-input v-model.number="form.superjava" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.superjava" autocomplete="off"  class="paperview-input-text"  align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="l1">
-                <el-input v-model.number="form.l1" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.l1" autocomplete="off"  class="paperview-input-text"   align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="apprascore">
-                <el-input v-model.number="form.apprascore" autocomplete="off" style="width: 50px" align="center"></el-input>
+                <el-input v-model.number="form.apprascore" autocomplete="off"  class="paperview-input-text"   align="center"></el-input>
                 </el-form-item>
               </td>
             </tr>
@@ -118,15 +118,13 @@
               <td>评价(优点缺点)</td>
               <td colspan="9">
                 <el-form-item prop="content">
-                  <el-input v-model="form.content" autocomplete="off" style="width: 750px;height: 50px"></el-input>
+                  <el-input  type="textarea"   v-model="form.content"  class="paperview-input-textarea"  autocomplete="off" style="width: 750px;height: 50px"></el-input>
                 </el-form-item>
 <!--                <textarea rows="4" cols="90" style="border: 0">{{this.form.content}}</textarea>-->
               </td>
             </tr>
             <tr>
               <td colspan="10" align="center">
-<!--                <el-button @click="closeDlog">取 消</el-button>-->
-<!--                <el-button type="primary">保存</el-button>-->
                       <div slot="footer" class="dialog-footer">
                         <el-button @click="closeDlog">取 消</el-button>
                         <el-button type="primary" @click="infocommit">确定</el-button>
@@ -137,59 +135,6 @@
         </div>
       </el-form>
     </el-dialog>
-
-
-    <!--        <el-row>-->
-    <!--          <el-col :span="8">-->
-    <!--        <el-form-item label="学生姓名" :label-width="formLabelWidth" prop="stuname" style="margin-left:-100px ">-->
-    <!--          <el-input v-model="form.stuname" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--          </el-col>-->
-    <!--          <el-col :span="8">-->
-    <!--        <el-form-item label="班期" :label-width="formLabelWidth" prop="termid">-->
-    <!--          <el-input v-model="form.termid" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--          </el-col>-->
-    <!--        </el-row>-->
-    <!--        <el-row>-->
-    <!--          <el-col :span="8">-->
-    <!--        <el-form-item label="html笔试成绩" :label-width="formLabelWidth" prop="html" style="margin-left:-100px ">-->
-    <!--          <el-input v-model="form.html" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--          </el-col>-->
-    <!--          <el-col :span="8">-->
-    <!--        <el-form-item label="oracle笔试成绩" :label-width="formLabelWidth" prop="oracle">-->
-    <!--          <el-input v-model="form.oracle" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--          </el-col>-->
-    <!--        </el-row>-->
-    <!--        <el-form-item label="js笔试成绩" :label-width="formLabelWidth" prop="js">-->
-    <!--          <el-input v-model="form.js" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="java笔试成绩" :label-width="formLabelWidth" prop="java">-->
-    <!--          <el-input v-model="form.java" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="java高级成绩" :label-width="formLabelWidth" prop="superjava">-->
-    <!--          <el-input v-model="form.superjava" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="面试成绩" :label-width="formLabelWidth" prop="L1">-->
-    <!--          <el-input v-model="form.L1" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="评价(优点缺点)" :label-width="formLabelWidth" prop="content">-->
-    <!--          <el-input v-model="form.content" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-    <!--        <el-form-item label="整体评价分数" :label-width="formLabelWidth" prop="apprascore">-->
-    <!--          <el-input v-model="form.apprascore" autocomplete="off" style="width: 150px"></el-input>-->
-    <!--        </el-form-item>-->
-
-    <!--      </el-form>-->
-
-    <!--      <div slot="footer" class="dialog-footer">-->
-    <!--        <el-button @click="closeDlog">取 消</el-button>-->
-    <!--        <el-button type="primary" @click="addEmp">确定</el-button>-->
-    <!--      </div>-->
-    <!--    </el-dialog>-->
-
 
     <el-table
       :data="tableData"
@@ -263,12 +208,8 @@
         fixed="right"
         label="操作"
         align="center">
-<!--        <template slot-scope="scope">-->
-<!--          <el-button type="text" align="center" @click="setMark(scope.row)">打分</el-button>-->
-<!--        </template>-->
 
         <template slot-scope="scope">
-<!--          <span v-if="scope.row.apprascore <=2 && scope.row.apprascore>=0">不合格</span>-->
           <span v-if="scope.row.apprascore >= 1">已评分</span>
           <span v-else class="el-button"
                 @click="setMark(scope.row)">评分</span>
@@ -400,6 +341,9 @@
         formLabelWidth: "20px",
         deptList: [],
         rules: {
+            content:[
+                {required: true, message: '请输入', trigger: 'blur'}
+            ],
           apprascore: [
             {required: true, message: '请输入', trigger: 'blur'}
           ],
@@ -653,6 +597,26 @@
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }
+  .paperview-input-text >>> .el-input__inner {
+    -webkit-appearance: none;
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    /*padding: 1%;*/
+    border: 0px;
+    width: 75px;
+    height:40px;
+  }
+  .paperview-input-textarea >>> .el-textarea__inner {
+    -webkit-appearance: none;
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    outline: none;
+    border: 0px;
+    width: 100%;
+  }
+
 
 
 </style>

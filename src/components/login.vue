@@ -50,13 +50,12 @@
            if (valid) {
             //提交我们的用户名和密码
            axios.post("/login",this.form).then(res => {
-             if (res.status=="200"){
+             if (res.data.status=="200"){
                  //将用户名存储到sessionStorage中
                  sessionStorage.setItem("userName",this.form.name)
-
                  sessionStorage.setItem("role",res.data.data.role)
                  //跳转页面
-                this.$router.push({path:'/Homes'});
+                 this.$router.push({path:'/Homes'});
              } else {
                this.$message({
                  message:"用户名或者密码错误",

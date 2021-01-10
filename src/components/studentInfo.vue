@@ -197,7 +197,7 @@
       },
       //获取所有班期信息
       getTerm(){
-        axios.post("/getAllTerm").then(res =>{
+        axios.post("/getAllTerms").then(res =>{
           this.termList = res.data.data
         })
 

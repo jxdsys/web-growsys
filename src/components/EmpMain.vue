@@ -306,7 +306,7 @@
                                 callback();
                             }
                         }
-                    }, 1000);
+                    });
                 };
             var checkScore = (rule, value, callback) => {
                 if (!value) {
@@ -322,7 +322,7 @@
                             callback();
                         }
                     }
-                }, 1000);
+                });
             };
             return {
                 empForm:{
