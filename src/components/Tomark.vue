@@ -263,8 +263,15 @@
         fixed="right"
         label="操作"
         align="center">
+<!--        <template slot-scope="scope">-->
+<!--          <el-button type="text" align="center" @click="setMark(scope.row)">打分</el-button>-->
+<!--        </template>-->
+
         <template slot-scope="scope">
-          <el-button type="text" align="center" @click="setMark(scope.row)">打分</el-button>
+<!--          <span v-if="scope.row.apprascore <=2 && scope.row.apprascore>=0">不合格</span>-->
+          <span v-if="scope.row.apprascore >= 1">已评分</span>
+          <span v-else class="el-button"
+                @click="setMark(scope.row)">评分</span>
         </template>
       </el-table-column>
     </el-table>
