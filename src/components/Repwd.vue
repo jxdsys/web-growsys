@@ -3,71 +3,66 @@
     <h2 align="center">重置密码</h2>
 
 
-        <div align="left">
-          <el-input v-model="listQuery.filter" placeholder="请输入用户姓名" style="width: 200px"></el-input>
-          <el-button type="primary" @click="querySchAppra">查询</el-button>
-        </div>
+    <div align="left">
+      <el-input v-model="listQuery.filter" placeholder="请输入用户姓名" style="width: 200px"></el-input>
+      <el-button type="primary" @click="querySchAppra">查询</el-button>
+    </div>
 
 
-        <el-table
-          :data="tableData"
-          border
-          stripe
-          height="360px"
-          style="width: 100%"
-          @selection-change="handleSelectionChange">
+    <el-table
+      :data="tableData"
+      border
+      stripe
+      height="378px"
+      style="width: 100%"
+      @selection-change="handleSelectionChange">
 
-          <el-table-column
-            type="selection"
-            width="75" align="center">
-          </el-table-column>
-          <el-table-column
-            label="序号"
-            type="index"
-            width="80" align="center">
-          </el-table-column>
-          <!--          <el-table-column-->
-          <!--            prop="sch_appra_id"-->
-          <!--            label="编号"-->
-          <!--            width="240" align="center">-->
-          <!--          </el-table-column>-->
-          <el-table-column
-            prop="username"
-            label="姓名"
-            width="240" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="password"
-            label="密码"
-            width="240" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="role"
-            label="角色" align="center">
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="100" header-align="center">
-            <template slot-scope="scope">
-              <el-button type="text" @click="handleDelete(scope.row)">重置密码</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          background
-          :current-page.sync="page.currentPage"
-          :page-sizes="page.sizes"
-          :page-size="this.listQuery.limit"
-          :total="total"
-          layout="prev,pager,next,sizes,jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        >
-        </el-pagination>
+      <el-table-column
+        type="selection"
+        width="75" align="center">
+      </el-table-column>
+      <el-table-column
+        label="序号"
+        type="index"
+        width="80" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="username"
+        label="姓名"
+        width="240" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="password"
+        label="密码"
+        width="240" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="role"
+        label="角色" align="center">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="100" header-align="center">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleDelete(scope.row)">重置密码</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      background
+      :current-page.sync="page.currentPage"
+      :page-sizes="page.sizes"
+      :page-size="this.listQuery.limit"
+      :total="total"
+      layout="prev,pager,next,sizes,jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    >
+    </el-pagination>
 
 
-      <el-footer>最终解释权归我所有</el-footer>
+    <el-footer class="el-aside" style="margin-top: 30px ;">©金现代金桥工程第四十九期第四小组</el-footer>
 
 
   </div>
@@ -89,7 +84,7 @@
           sizes: [2, 4, 6, 8, 10],
         },
         listQuery: {//初始查询条件
-          limit: 2,
+          limit: 4,
           page: 1,
           filter: ""
         },
@@ -125,14 +120,11 @@
     },
     methods: {
       getEmps: function () {
-        //这是用于获取全部的员工数据
-        // axios.get("/getEmps/"+this.listQuery.limit+"/"+this.listQuery.page).then(res => {
-        //参数过多的时，推荐使用post方式传参
+        //获取全部的users数据
         axios.post("/getUsers", this.listQuery).then(res => {
           //res.data返回的是json对象数组
           this.tableData = res.data.users;
           this.total = res.data.total;
-          //this.page.currentPage=1;//默认显示第一页
         })
       },
       querySchAppra: function () {
@@ -193,7 +185,6 @@
 
       },
       showAdd: function () {
-        // this.getDepts();
         this.form = {};
         this.dialogTitle = "新增";
         this.dialogFormVisible = true;
@@ -203,7 +194,6 @@
         this.dialogTitle = "编辑";
         //根据员工编号获取员工详细信息，展示到对话框
         axios.get("/getSchById/" + rowData.sch_appra_id).then(res => {
-
           this.form = res.data
           this.dialogFormVisible = true;
         })
@@ -284,7 +274,7 @@
 
 
     created() {
-      //alert("vue实例已经创建完成")
+
     },
     mounted() {
       //查询数据
@@ -330,6 +320,9 @@
 
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
   }
 </style>
 

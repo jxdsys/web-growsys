@@ -29,7 +29,7 @@
       <el-table
         border
         :data="tableData"
-        height="460px"
+        height="375px"
         @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
@@ -75,6 +75,7 @@
         @current-change="handleCurrentChange">
       </el-pagination>
     </div>
+    <el-footer class="el-aside" style="margin-top: 30px">©金现代金桥工程第四十九期第四小组</el-footer>
   </div>
 </template>
 
@@ -84,6 +85,7 @@
         name: 'Dept',
         data() {
             return {
+              //表数据
                 tableData:[]
                 ,page:{
                     currentPage:1//当前页码
@@ -114,11 +116,13 @@
             formLabelWidth:"120px",
                 rules:{
                     dname:[
-                      {required: true, message: '请输入部门名称', trigger: 'blur'}
-                  ] ,
+                      {required: true, message: '请输入部门名称', trigger: 'blur'},
+                    ] ,
                     dcrib:[
-                      {required: true, message: '请输入部门描述', trigger: 'blur'}
-                 ],
+                      {required: true, message: '请输入部门描述', trigger: 'blur'},
+                      {pattern: /^[\u4e00-\u9fa5]{1,5}$/, message: '请输入汉字', trigger: 'blur'}
+
+                    ],
 
                }
             }
@@ -300,5 +304,8 @@
 </script>
 
 <style scoped>
-
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
+    line-height: 60px;
+  }
 </style>

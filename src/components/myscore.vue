@@ -1,23 +1,23 @@
 <template>
   <div>
   <p style="font-size: 22px ;font-weight: bold" >我的成绩</p>
-  <el-tabs v-model="activeName" @tab-click="handleClick" style="float: left;padding: 0px 0px 0px 45px;font-size: ">
-    <el-tab-pane label="学校评价" name="first"  >
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
+  <el-tabs v-model="activeName" @tab-click="handleClick"  style="float: left;padding: 0px 45px 0px 30px;width: 1210px;">
+    <el-tab-pane label="学校评价"  name="first" >
+      <table border="1" style="border: 1px solid;margin-left: 70px" cellpadding="0" cellspacing="0" width="1000px" >
         <tr>
-          <td rowspan="2" width="120px" height="80px">培训学校</td>
-          <td rowspan="2" width="100px"  height="80px">班期</td>
-          <td rowspan="2" width="100px"  height="80px">评价人</td>
+          <td rowspan="2" width="150" height="80px">培训学校</td>
+          <td rowspan="2" width="120px"  height="80px">班期</td>
+          <td rowspan="2" width="120px"  height="80px">评价人</td>
           <td colspan="6" height="40px">培训期间成绩</td>
-          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
+          <td rowspan="2" width="300px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td width="80px" height="40px">html笔试</td>
-          <td width="80px" height="40px">oracle成绩</td>
-          <td width="80px" height="40px">js成绩</td>
-          <td width="80px" height="40px">java基础</td>
-          <td width="80px" height="40px">java高级</td>
-          <td width="80px" height="40px">L1面试</td>
+          <td width="100px" height="40px">html笔试</td>
+          <td width="100px" height="40px">oracle成绩</td>
+          <td width="100px" height="40px">js成绩</td>
+          <td width="100px" height="40px">java基础</td>
+          <td width="100px" height="40px">java高级</td>
+          <td width="100px" height="40px">L1面试</td>
         </tr>
         <tr>
           <td height="80px">学习评价</td>
@@ -58,18 +58,18 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="转正评价" name="second">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
+      <table border="1" style="border: 1px solid;margin-left: 70px" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2" width="120px" height="80px">项目</td>
-          <td rowspan="2" width="100px"  height="80px">员工部门</td>
-          <td rowspan="2" width="100px"  height="80px">员工职务</td>
-          <td rowspan="2" width="100px"  height="80px">评价人</td>
+          <td rowspan="2" width="150" height="80px">项目</td>
+          <td rowspan="2" width="120px"  height="80px">员工部门</td>
+          <td rowspan="2" width="120px"  height="80px">员工职务</td>
+          <td rowspan="2" width="120px"  height="80px">评价人</td>
           <td colspan="5">评价分项</td>
-          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
+          <td rowspan="2" width="240px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
-          <td width="80px">人品</td><td width="80px">性格</td>
+          <td width="100px">能力</td><td width="100px">积极性</td><td width="100px">沟通交流</td>
+          <td width="100px">人品</td><td width="100px">性格</td>
         </tr>
         <tr><td height="80px">工作评分</td>
           <td >{{this.deptAndEmpAppra.dname}}</td>
@@ -109,18 +109,18 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="一年评价" name="third">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
+      <table border="1" style="border: 1px solid;margin-left: 70px" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2" width="120px" height="80px">项目</td>
-          <td rowspan="2" width="100px" height="80px">员工部门</td>
-          <td rowspan="2" width="100px" height="80px">员工职务</td>
-          <td rowspan="2" width="100px" height="80px">评价人</td>
+          <td rowspan="2" width="150" height="80px">项目</td>
+          <td rowspan="2" width="120px" height="80px">员工部门</td>
+          <td rowspan="2" width="120px" height="80px">员工职务</td>
+          <td rowspan="2" width="120px" height="80px">评价人</td>
           <td colspan="5" >评价分项</td>
-          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
+          <td rowspan="2" width="240px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
-          <td width="80px">人品</td><td width="80px">性格</td>
+          <td width="100px">能力</td><td width="100px">积极性</td><td width="100px">沟通交流</td>
+          <td width="100px">人品</td><td width="100px">性格</td>
         </tr>
         <tr><td height="80px">工作评分</td>
           <td>{{this.deptAppraToOne.dname}}</td>
@@ -160,18 +160,18 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="两年评价" name="fourth">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
+      <table border="1" style="border: 1px solid;margin-left: 70px" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2" width="120px" height="80px">项目</td>
-          <td rowspan="2" width="100px" height="80px">员工部门</td>
-          <td rowspan="2" width="100px" height="80px">员工职务</td>
-          <td rowspan="2" width="100px" height="80px">评价人</td>
+          <td rowspan="2" width="150" height="80px">项目</td>
+          <td rowspan="2" width="120px" height="80px">员工部门</td>
+          <td rowspan="2" width="120px" height="80px">员工职务</td>
+          <td rowspan="2" width="120px" height="80px">评价人</td>
           <td colspan="5">评价分项</td>
-          <td rowspan="2" width="200px" height="80px">整体评价分数</td>
+          <td rowspan="2" width="240px" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
-          <td width="80px">人品</td><td width="80px">性格</td>
+          <td width="100px">能力</td><td width="100px">积极性</td><td width="100px">沟通交流</td>
+          <td width="100px">人品</td><td width="100px">性格</td>
         </tr>
         <tr><td height="80px">工作评分</td>
           <td>{{this.deptAppraToTwo.dname}}</td>
@@ -211,18 +211,18 @@
       </table>
     </el-tab-pane>
     <el-tab-pane label="三年评价" name="fifth">
-      <table border="1" style="border: 1px solid" cellpadding="0" cellspacing="0" width="1000px">
+      <table border="1" style="border: 1px solid;margin-left: 70px" cellpadding="0" cellspacing="0" width="1000px">
         <tr>
-          <td rowspan="2" width="120px" height="80px">项目</td>
-          <td rowspan="2" width="100px" height="80px">员工部门</td>
-          <td rowspan="2" width="100px" height="80px">员工职务</td>
-          <td rowspan="2" width="100px" height="80px">评价人</td>
+          <td rowspan="2" width="150" height="80px">项目</td>
+          <td rowspan="2" width="120px" height="80px">员工部门</td>
+          <td rowspan="2" width="120px" height="80px">员工职务</td>
+          <td rowspan="2" width="120px" height="80px">评价人</td>
           <td colspan="5" >评价分项</td>
-          <td rowspan="2" width="200" height="80px">整体评价分数</td>
+          <td rowspan="2" width="240" height="80px">整体评价分数</td>
         </tr>
         <tr>
-          <td width="80px">能力</td><td width="80px">积极性</td><td width="80px">沟通交流</td>
-          <td width="80px">人品</td><td width="80px">性格</td>
+          <td width="100px">能力</td><td width="100px">积极性</td><td width="100px">沟通交流</td>
+          <td width="100px">人品</td><td width="100px">性格</td>
         </tr>
         <tr><td height="80px">工作评分</td>
           <td>{{this.deptAppraToThree.dname}}</td>
@@ -261,6 +261,8 @@
 
       </table>
     </el-tab-pane>
+    <el-footer class="el-aside" style="margin-top: 155px;" ><p style="line-height: 28px">©金现代金桥工程第四十九期第四小组</p></el-footer>
+
   </el-tabs>
   </div>
 </template>
@@ -310,4 +312,8 @@
   };
 </script>
 <style scoped>
+  .el-footer {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
+  }
+
 </style>

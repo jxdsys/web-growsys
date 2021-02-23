@@ -3,9 +3,9 @@
     <div>
       <h2 align="center">修改密码</h2>
     </div>
-  <div align="center" style="width: 500px;float: left;padding: 50px 0px 0px 300px">
+  <div align="center" style="width: 500px;float: left;padding: 50px 0px 0px 350px">
   <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-    <el-form-item label="旧密码" prop="oldPass">
+    <el-form-item label="旧密码" prop="oldpass">
       <el-input type="password" v-model="ruleForm.oldpass" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="新密码" prop="pass">
@@ -20,7 +20,10 @@
     </el-form-item>
   </el-form>
   </div>
+      <el-footer class="el-aside" style="margin-top: 500px;" ><p style="line-height: 28px">©金现代金桥工程第四十九期第四小组</p></el-footer>
+
   </div>
+
 </template>
 
 <script>
@@ -50,7 +53,9 @@
           var validateOldPass = (rule,value,callback) =>{
             if (value === '') {
               callback(new Error('请输入密码'));
-            }else {
+            }else if (value != this.password) {
+              callback(new Error('请输入正确的密码'));
+            } else {
               callback();
             }
           };
@@ -61,20 +66,25 @@
               checkPass: '',
               age: '',
               oldpass:'',
-              userName:''
+              userName:'',
+              role:''
+
             },
             userName:'',
             password:'',
             rules: {
               pass: [
                 { validator: validatePass, trigger: 'blur' },
+                {required: true, message: '请输入密码', trigger: 'blur'},
                 {min: 6, max: 15, message: '长度在 6到 15 个字符', trigger: 'blur'}
               ],
               checkPass: [
                 { validator: validateAgainPass, trigger: 'blur' },
+                {required: true, message: '请在此输入密码', trigger: 'blur'},
                 {min: 6, max: 15, message: '长度在 6到 15 个字符', trigger: 'blur'}
               ],
-              oldPass:[
+              oldpass:[
+                {required: true, message: '请输入旧密码', trigger: 'blur'},
                 { validator: validateOldPass, trigger: 'blur' },
 
               ]
@@ -90,15 +100,22 @@
             })
           },
           submitForm(formName) {
+            this.getOldPwd();
             this.$refs[formName].validate((valid) => {
-              if (this.password == this.ruleForm.oldpass) {
+
                 if (valid) {
+                  this.ruleForm.userName = sessionStorage.getItem("userName")
+                  this.ruleForm.role = sessionStorage.getItem("role");
+
                   axios.post("updPwd",this.ruleForm).then(res =>{
                     if (res.data=="success"){
+                      this.getOldPwd();
                       this.$message({
                         message:  "修改密码成功",
                         type: "success"
                       })
+                        this.ruleForm = {};
+
                     }else {
                       this.$message({
                         message:  "修改密码失败",
@@ -110,27 +127,28 @@
                   console.log('error submit!!');
                   return false;
                 }
-              }else {
-                this.$message({
-                  message:  "旧密码不正确",
-                  type: "error"
-                })
-              }
+
 
             });
           },
           resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.$nextTick(() => {
+              this.$refs['ruleForm'].clearValidate()
+            })
           }
         },
       created() {
         this.userName = sessionStorage.getItem("userName")
         this.ruleForm.userName = sessionStorage.getItem("userName")
+        this.ruleForm.role = sessionStorage.getItem("role");
         this.getOldPwd();
       }
     }
 </script>
 
 <style scoped>
-
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
+  }
 </style>

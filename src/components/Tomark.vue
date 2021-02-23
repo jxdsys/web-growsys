@@ -6,15 +6,15 @@
 
 
     <div align="left">
-      <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
+      <el-input v-model="listQuery.filter" placeholder="请输入学生姓名" style="width: 200px"></el-input>
       <el-button type="primary" @click="querySchAppra">查询</el-button>
     </div>
 
-<!--    &lt;!&ndash;  新增和编辑的对话框      &ndash;&gt;-->
+    <!--    &lt;!&ndash;  新增和编辑的对话框      &ndash;&gt;-->
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="850px">
       <el-form :model="form" :rules="rules" label-position="right" ref="schform">
         <div align="center" style="border: 0px solid">
-          <table border="=1" id="table1" :model="baseData">
+          <table border="=1" id="table1" :model="baseData" cellpadding="1px">
             <tr>
               <td>姓名</td>
               <td>{{this.baseData.stuname}}</td>
@@ -22,7 +22,9 @@
               <td>{{this.baseData.sex}}</td>
               <td>名族</td>
               <td>{{this.baseData.people}}</td>
-              <td rowspan="4">我是一张图片</td>
+              <td rowspan="4" style="width: 100px">
+                <img v-if="baseData.pictureAdd" :src="require('../assets/img/' + baseData.pictureAdd)" class="avatar" width="100px" >
+                <img v-else src="../assets/logo.png" class="avatar" width="100px"></td>
             </tr>
             <tr>
               <td>出生日期</td>
@@ -70,47 +72,55 @@
               <td>学习评价</td>
               <td>
                 <el-form-item prop="termid" :label-width="formLabelWidth">
-                <el-input v-model="form.termid" autocomplete="off" class="paperview-input-text" disabled></el-input>
+                  <el-input v-model="form.termid" autocomplete="off" class="paperview-input-text" readonly></el-input>
                 </el-form-item>
               </td>
               <td style="width: 100px">
                 <el-form-item prop="sch_appra_name" :label-width="formLabelWidth">
-                <el-input v-model="form.sch_appra_name" autocomplete="off"  class="paperview-input-text"  disabled></el-input>
+                  <el-input v-model="form.sch_appra_name" autocomplete="off" class="paperview-input-text"
+                            readonly></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="html">
-                <el-input v-model.number="form.html" autocomplete="off"  class="paperview-input-text"  align="center"></el-input>
+                  <el-input v-model.number="form.html" autocomplete="off" class="paperview-input-text"
+                            align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="oracle">
-                <el-input v-model.number="form.oracle" autocomplete="off"   class="paperview-input-text"  align="center"></el-input>
+                  <el-input v-model.number="form.oracle" autocomplete="off" class="paperview-input-text"
+                            align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="js">
-                <el-input v-model.number="form.js" autocomplete="off"   class="paperview-input-text"  align="center"></el-input>
+                  <el-input v-model.number="form.js" autocomplete="off" class="paperview-input-text"
+                            align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="java">
-                <el-input v-model.number="form.java" autocomplete="off"   class="paperview-input-text"  align="center"></el-input>
+                  <el-input v-model.number="form.java" autocomplete="off" class="paperview-input-text"
+                            align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="superjava">
-                <el-input v-model.number="form.superjava" autocomplete="off"  class="paperview-input-text"  align="center"></el-input>
+                  <el-input v-model.number="form.superjava" autocomplete="off" class="paperview-input-text"
+                            align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="l1">
-                <el-input v-model.number="form.l1" autocomplete="off"  class="paperview-input-text"   align="center"></el-input>
+                  <el-input v-model.number="form.l1" autocomplete="off" class="paperview-input-text"
+                            align="center"></el-input>
                 </el-form-item>
               </td>
               <td>
                 <el-form-item prop="apprascore">
-                <el-input v-model.number="form.apprascore" autocomplete="off"  class="paperview-input-text"   align="center"></el-input>
+                  <el-input v-model.number="form.apprascore" autocomplete="off" class="paperview-input-text"
+                            align="center"></el-input>
                 </el-form-item>
               </td>
             </tr>
@@ -118,17 +128,17 @@
               <td>评价(优点缺点)</td>
               <td colspan="9">
                 <el-form-item prop="content">
-                  <el-input  type="textarea"   v-model="form.content"  class="paperview-input-textarea"  autocomplete="off" style="width: 750px;height: 50px"></el-input>
+                  <el-input type="textarea" v-model="form.content" class="paperview-input-textarea" autocomplete="off"
+                            style="width: 750px;height: 50px"></el-input>
                 </el-form-item>
-<!--                <textarea rows="4" cols="90" style="border: 0">{{this.form.content}}</textarea>-->
               </td>
             </tr>
             <tr>
               <td colspan="10" align="center">
-                      <div slot="footer" class="dialog-footer">
-                        <el-button @click="closeDlog">取 消</el-button>
-                        <el-button type="primary" @click="infocommit">确定</el-button>
-                      </div>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="closeDlog">取 消</el-button>
+                  <el-button type="primary" @click="infocommit">确定</el-button>
+                </div>
               </td>
             </tr>
           </table>
@@ -140,7 +150,7 @@
       :data="tableData"
       border
       stripe
-      height="360px"
+      height="390px"
       style="width: 100%"
     >
       <el-table-column
@@ -229,7 +239,7 @@
     </el-pagination>
 
 
-    <el-footer>最终解释权归我所有</el-footer>
+    <el-footer class="el-aside" style="margin-top: 30px">©金现代金桥工程第四十九期第四小组</el-footer>
 
 
   </div>
@@ -249,11 +259,11 @@
           if (!Number.isInteger(value)) {
             callback(new Error('请输入数字值'));
           }
-          if (value <= 0||value>5) {
-              callback(new Error('必须在1-5的数字'));
-            } else {
-              callback();
-            }
+          if (value <= 0 || value > 5) {
+            callback(new Error('必须在1-5的数字'));
+          } else {
+            callback();
+          }
 
         });
       };
@@ -263,10 +273,10 @@
         }
         setTimeout(() => {
           if (!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
+            callback(new Error('请输入整数'));
           }
-          if (value <= 0||value>100) {
-            callback(new Error('必须在1-100的数字'));
+          if (value <= 0 || value > 100) {
+            callback(new Error('范围在1-100'));
           } else {
             callback();
           }
@@ -284,7 +294,7 @@
         },
         termList: [],
         listQuery: {//初始查询条件
-          limit: 2,
+          limit: 4,
           page: 1,
           filter: "",
           userName: ""
@@ -299,7 +309,7 @@
         dialogFormVisible: false,
         //定义表单数据
         form: {
-          sch_appra_id:"",
+          sch_appra_id: "",
           sch_appra_name: "",
           stuid: "",
           termid: "",
@@ -312,60 +322,60 @@
           content: "",
           apprascore: ""
         },
-        baseData:{
+        baseData: {
           //姓名
-          stuname:"",
+          stuname: "",
           //性别
-          sex:"",
+          sex: "",
           //名族
-          people:"",
+          people: "",
           //出生日期
-          birthday:"",
+          birthday: "",
           //籍贯
-          natives:"",
+          natives: "",
           //婚否
-          marry:"",
+          marry: "",
           //联系电话
-          tel:"",
+          tel: "",
           //身份证
-          cardid:"",
+          cardid: "",
           //学校
-          school:"",
+          school: "",
           //专业
-          profession:"",
+          profession: "",
           //备注
-          content:"",
+          content: "",
           //相片
-          pictureAdd:"",
+          pictureAdd: "",
         },
         formLabelWidth: "20px",
         deptList: [],
         rules: {
-            content:[
-                {required: true, message: '请输入', trigger: 'blur'}
-            ],
+          content: [
+            {required: true, message: '请输入', trigger: 'blur'}
+          ],
           apprascore: [
             {required: true, message: '请输入', trigger: 'blur'}
           ],
           apprascore: [
-            { validator: checkapprascore, trigger: 'blur' }
+            {validator: checkapprascore, trigger: 'blur'}
           ],
-          html:[
-            { validator: checkscore, trigger: 'blur' }
-          ],
-          oracle:[
+          html: [
             {validator: checkscore, trigger: 'blur'}
           ],
-          js:[
+          oracle: [
             {validator: checkscore, trigger: 'blur'}
           ],
-          superjava:[
+          js: [
             {validator: checkscore, trigger: 'blur'}
           ],
-          java:[
+          superjava: [
             {validator: checkscore, trigger: 'blur'}
           ],
-          l1:[
+          java: [
+            {validator: checkscore, trigger: 'blur'}
+          ],
+          l1: [
             {validator: checkscore, trigger: 'blur'}
           ]
 
@@ -377,25 +387,19 @@
     },
     methods: {
       getEmps: function () {
-        //这是用于获取全部的员工数据
-        // axios.get("/getEmps/"+this.listQuery.limit+"/"+this.listQuery.page).then(res => {
-        //参数过多的时，推荐使用post方式传参
+        //这是用于某期学生数据
         axios.post("/getSchOneTermStu", this.listQuery).then(res => {
           //res.data返回的是json对象数组
           if (res.data.schStuAppra == null) {
             this.$message({
               message: "您没有需要评价的学生",
             })
-            // alert("您没有需要评价的学生")
           }
           this.tableData = res.data.schStuAppra;
           this.total = res.data.total;
-
-          //this.page.currentPage=1;//默认显示第一页
         })
       },
       infocommit: function () {
-
         this.$refs["schform"].validate((valid) => {
           if (valid) {
             axios.post("/tocommit", this.form).then(res => {
@@ -421,16 +425,16 @@
         })
 
       },
-      setMark:function (rowData) {
-        this.dialogTitle ="评分"
-        this.dialogFormVisible=true
+      setMark: function (rowData) {
+        this.dialogTitle = "评分"
+        this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['schform'].clearValidate()
         });
-        //获取员工个人的详细信息
-        axios.post("/SchoolGetStu",rowData.stuid).then(res => {
+        //获取学生个人的详细信息
+        axios.post("/SchoolGetStu", rowData.stuid).then(res => {
           //this.form =res.data
-          this.baseData=res.data
+          this.baseData = res.data
         })
         axios.get("/getOneStuById/" + rowData.stuid).then(res => {
           this.form = res.data
@@ -438,17 +442,8 @@
         })
       },
       getThatTerm: function () {
-
         axios.get("/getThatTerm/" + this.listQuery.userName).then(res => {
-          //res.data返回的是json对象数组
-          // if (res.data==0) {
-          //  return;
-          // }else {
           sessionStorage.setItem("teachid", res.data)
-          // }
-
-
-          //this.page.currentPage=1;//默认显示第一页
         })
       },
       clickTerm(data) {
@@ -475,7 +470,6 @@
         //当前页码发生变化时，触发该事件
         //获取当前页码赋值给this.listQuery.page,然后调用getEmps方法
         //val代表当前页码
-
         this.listQuery.page = val;
         this.getEmps();
       },
@@ -494,7 +488,7 @@
         this.form = {};
         this.dialogTitle = "打分";
 
-        //根据员工编号获取员工详细信息，展示到对话框
+        //根据编号获取学生详细信息，展示到对话框
         axios.get("/getOneStuById/" + rowData.stuid).then(res => {
           this.form = res.data
           this.dialogFormVisible = true;
@@ -512,7 +506,7 @@
 
 
     created() {
-      //alert("vue实例已经创建完成")
+
     },
     mounted() {
       this.listQuery.userName = sessionStorage.getItem("userName");
@@ -522,13 +516,7 @@
       this.getTerm();
       //查询数据
       this.getEmps();
-      //从sessionStorage中获取用户名
-      //this.uname = sessionStorage.getItem("uname");
-
       this.getThatTerm();
-      // this.listQuery.userName = sessionStorage.getItem("userName")
-      //alert(this.listQuery.userName)
-
     },
 
   }
@@ -536,34 +524,38 @@
 </script>
 
 <style scoped>
-  #table1{
+  #table1 {
     text-align: center;
     border-collapse: collapse;
     height: 150px;
     width: 100%;
   }
-  table{
+
+  table {
     text-align: center;
     border-collapse: collapse;
     width: 100%;
     height: 150px;
   }
- el-input{
+
+  el-input {
 
     -webkit-appearance: none;
     background-color: #FFF;
     background-image: none;
     border-radius: 4px;
-    border: 0px;//改成0，边框就消失了！
-  width: 100%;
+    border: 0px;
+  / / 改成0，边框就消失了！ width: 100 %;
 
   }
-  textarea{
+
+  textarea {
     border: 0;
     width: 98%;
     height: 98%;
 
   }
+
   .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
@@ -597,6 +589,7 @@
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }
+
   .paperview-input-text >>> .el-input__inner {
     -webkit-appearance: none;
     background-color: #FFF;
@@ -605,8 +598,9 @@
     /*padding: 1%;*/
     border: 0px;
     width: 75px;
-    height:40px;
+    height: 40px;
   }
+
   .paperview-input-textarea >>> .el-textarea__inner {
     -webkit-appearance: none;
     background-color: #FFF;
@@ -616,8 +610,9 @@
     border: 0px;
     width: 100%;
   }
-
-
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
+  }
 
 </style>
 

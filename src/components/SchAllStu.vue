@@ -18,7 +18,7 @@
       :data="tableData"
       border
       stripe
-      height="360px"
+      height="395px"
       style="width: 100%"
     >
       <el-table-column
@@ -109,7 +109,7 @@
                    disabled
                    show-score
                    text-color="#101010"
-                   score-template="暂无评分"
+
                    :colors="scoreColors"
           >
           </el-rate>
@@ -129,7 +129,8 @@
     </el-pagination>
 
 
-    <el-footer>最终解释权归我所有</el-footer>
+    <el-footer class="el-aside" style="margin-top: 30px">©金现代金桥工程第四十九期第四小组</el-footer>
+
 
 
   </div>
@@ -156,7 +157,7 @@
         },
         termList:[],
         listQuery: {//初始查询条件
-          limit: 2,
+          limit: 4,
           page: 1,
           filter: "",
           termid: "",
@@ -297,6 +298,11 @@
 
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
+    line-height: 60px;
   }
 </style>
 

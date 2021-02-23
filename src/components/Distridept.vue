@@ -1,12 +1,11 @@
 <template>
   <div>
 
-    <h2 align="center" style="margin-top: auto">分配部门
-    </h2>
+    <h2 align="center" style="margin-top: auto">分配部门</h2>
 
 
     <div align="left">
-      <el-input v-model="listQuery.filter" placeholder="请输入学校评价人姓名" style="width: 200px"></el-input>
+      <el-input v-model="listQuery.filter" placeholder="请输入学生姓名" style="width: 200px"></el-input>
       <el-button type="primary" @click="querySchAppra">查询</el-button>
     </div>
 
@@ -46,7 +45,7 @@
       :data="tableData"
       border
       stripe
-      height="360px"
+      height="390px"
       style="width: 100%"
     >
       <el-table-column
@@ -77,10 +76,6 @@
                 @click="distribute(scope.row)">待分配</span>
           <span v-if="scope.row.deptno!=0">已入职</span>
         </template>
-
-        <!--        <template slot-scope="scope">-->
-        <!--          <el-button type="text" align="center" @click="distribute(scope.row)">分配</el-button>-->
-        <!--        </template>-->
       </el-table-column>
     </el-table>
     <el-pagination
@@ -96,7 +91,7 @@
     </el-pagination>
 
 
-    <el-footer>最终解释权归我所有</el-footer>
+    <el-footer class="el-aside" style="margin-top: 30px">©金现代金桥工程第四十九期第四小组</el-footer>
 
 
   </div>
@@ -110,7 +105,6 @@
     data() {
       return {
         isShow: "",
-
         sname: "",//存储用户名
         teachid: "",
         //表格分页查询等相关数据
@@ -122,7 +116,7 @@
         termList: [],
 
         listQuery: {//初始查询条件
-          limit: 2,
+          limit: 4,
           page: 1,
           filter: "",
           userName: "",
@@ -153,21 +147,16 @@
     },
     methods: {
       getEmps: function () {
-        //这是用于获取全部的员工数据
-        // axios.get("/getEmps/"+this.listQuery.limit+"/"+this.listQuery.page).then(res => {
-        //参数过多的时，推荐使用post方式传参
+        //获取要分配的学生
         axios.post("/getAllStuDistrStu", this.listQuery).then(res => {
           //res.data返回的是json对象数组
           if (res.data.schStuAppraDistri == "") {
             this.$message({
               message: "您没有需要分配部门的学生",
             })
-            //alert("您没有需要分配部门的学生")
           }
           this.tableData = res.data.schStuAppraDistri;
           this.total = res.data.total;
-
-          //this.page.currentPage=1;//默认显示第一页
         })
       },
       insertInfo: function () {
@@ -178,15 +167,6 @@
                 this.form = {};
                 this.dialogFormVisible = false;
                 this.getEmps();
-                // this.flag=true;
-
-                // const loadingObj = this.$loading({
-                //   lock: true,
-                //   text: '提交中...',
-                //   spinner: 'el-icon-loading',
-                //   background: 'rgba(0, 0, 0, 0.7)',
-                //   target: document.querySelector('.submit-test-dialog')
-                // });
                 this.$message({
                   message: this.dialogTitle + "成功",
                   type: "success"
@@ -260,25 +240,20 @@
         //当前页码发生变化时，触发该事件
         //获取当前页码赋值给this.listQuery.page,然后调用getEmps方法
         //val代表当前页码
-
         this.listQuery.page = val;
         this.getEmps();
       },
 
       //获取某个评价人下的班期信息
       getTerm: function () {
-        //alert(this.listQuery.userName)
         axios.get("/getSomeTerms/" + this.listQuery.userName).then(res => {
-          //alert(this.listQuery.userName)
           this.termList = res.data.data
         })
 
       },
       handleEdit: function (rowData) {
-        // alert(rowData.stuid)
         this.form = {};
         this.dialogTitle = "打分";
-
         //根据员工编号获取员工详细信息，展示到对话框
         axios.get("/getOneStuById/" + rowData.stuid).then(res => {
           this.form = res.data
@@ -297,7 +272,7 @@
 
 
     created() {
-      //alert("vue实例已经创建完成")
+
     },
     mounted() {
       this.listQuery.userName = sessionStorage.getItem("userName");
@@ -376,6 +351,9 @@
 
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
   }
 </style>
 

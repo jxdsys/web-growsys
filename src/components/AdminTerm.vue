@@ -2,102 +2,103 @@
   <div>
     <h2 align="center">维护班期</h2>
 
-        <div align="left" style="float: left">
-          <el-input v-model="listQuery.filter" placeholder="请输入班期编号进行查询" style="width: 200px"></el-input>
-          <el-button type="primary" @click="querySchAppra">查询</el-button>
-        </div>
+    <div align="left" style="float: left">
+      <el-input v-model="listQuery.filter" placeholder="请输入班期编号进行查询" style="width: 200px"></el-input>
+      <el-button type="primary" @click="querySchAppra">查询</el-button>
+    </div>
 
-        <div align="right" style="float: right">
-          <el-button type="primary" @click="showAdd">新增班期</el-button>
-        </div>
-
-
-        <!--  新增和编辑的对话框      -->
-        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-          <el-form :model="form" :rules="rules" label-position="right" ref="schform">
-            <el-form-item label="班期" :label-width="formLabelWidth" prop="termName">
-              <el-input v-model="form.termName" autocomplete="off" style="width: 350px"></el-input>
-            </el-form-item>
-            <el-form-item label="班期状态" :label-width="formLabelWidth" prop="flag">
-              <el-input v-model="form.flag" autocomplete="off" style="width: 350px"></el-input>
-            </el-form-item>
-
-            <el-form-item label="任课老师" :label-width="formLabelWidth" prop="sch_appra_id">
-              <el-select v-model="form.schAppraId" placeholder="请选择任课老师" style="width: 350px">
-                <el-option v-for="schoolappra in this.schoolappraList" :value="schoolappra.schAppraId" :label="schoolappra.schAppraName"></el-option>
-              </el-select>
-            </el-form-item>
-
-          </el-form>
-
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="closeDlog">取 消</el-button>
-            <el-button type="primary" @click="addAppra">确定</el-button>
-          </div>
-        </el-dialog>
-
-        <div style="margin-top: 70px"></div>
-
-        <el-table
-          :data="tableData"
-          border
-          stripe
-          height="335px"
-          style="width: 100%"
-          @selection-change="handleSelectionChange">
+    <div align="right" style="float: right">
+      <el-button type="primary" @click="showAdd">新增班期</el-button>
+    </div>
 
 
-          <el-table-column
-            label="序号"
-            type="index"
-            width="80" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="term_name"
-            label="班期"
-            width="240" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="sch_appra_name"
-            label="教师姓名"
-            width="240" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="flag"
-            label="班期状态" align="center">
-          </el-table-column>
-          <el-table-column
-            prop="state"
-            label="教师状态" align="center">
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="150" header-align="center">
-              <template slot-scope="scope">
+    <!--  新增和编辑的对话框      -->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+      <el-form :model="form" :rules="rules" label-position="right" ref="schform">
+        <el-form-item label="班期" :label-width="formLabelWidth" prop="termName">
+          <el-input v-model="form.termName" autocomplete="off" style="width: 350px"></el-input>
+        </el-form-item>
+        <el-form-item label="班期状态" :label-width="formLabelWidth" prop="flag">
+          <el-input v-model="form.flag" autocomplete="off" style="width: 350px"></el-input>
+        </el-form-item>
+
+        <el-form-item label="任课老师" :label-width="formLabelWidth" prop="sch_appra_id">
+          <el-select v-model="form.schAppraId" placeholder="请选择任课老师" style="width: 350px">
+            <el-option v-for="schoolappra in this.schoolappraList" :value="schoolappra.schAppraId"
+                       :label="schoolappra.schAppraName"></el-option>
+          </el-select>
+        </el-form-item>
+
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeDlog">取 消</el-button>
+        <el-button type="primary" @click="addAppra">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <div style="margin-top: 70px"></div>
+
+    <el-table
+      :data="tableData"
+      border
+      stripe
+      height="370px"
+      style="width: 100%"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        label="序号"
+        type="index"
+        width="80" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="term_name"
+        label="班期"
+        width="240" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="sch_appra_name"
+        label="教师姓名"
+        width="240" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="flag"
+        label="班期状态" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="state"
+        label="教师状态" align="center">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="150" header-align="center">
+        <template slot-scope="scope">
 
                 <span v-if="scope.row.sch_appra_name == null" class="el-button"
-                      @click="distriTeacher(scope.row)" >分配教师</span>
-                <span v-if="scope.row.sch_appra_name!=null" style="align-content: center">已分配</span>
-              </template>
+                      @click="distriTeacher(scope.row)">分配教师</span>
+          <span v-if="scope.row.sch_appra_name!=null" style="align-content: center">已分配</span>
+          <span v-if="scope.row.state==null&&scope.row.sch_appra_name != null"
+                style="align-content: center">(教师离职)</span>
+        </template>
 
-<!--              <el-button type="text" @click="distriTeacher(scope.row)">分配教师</el-button>-->
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          background
-          :current-page.sync="page.currentPage"
-          :page-sizes="page.sizes"
-          :page-size="this.listQuery.limit"
-          :total="total"
-          layout="prev,pager,next,sizes,jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        >
-        </el-pagination>
+        <!--              <el-button type="text" @click="distriTeacher(scope.row)">分配教师</el-button>-->
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      background
+      :current-page.sync="page.currentPage"
+      :page-sizes="page.sizes"
+      :page-size="this.listQuery.limit"
+      :total="total"
+      layout="prev,pager,next,sizes,jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    >
+    </el-pagination>
 
 
-      <el-footer>最终解释权归我所有</el-footer>
+    <el-footer class="el-aside" style="margin-top: 30px">©金现代金桥工程第四十九期第四小组</el-footer>
 
 
   </div>
@@ -114,7 +115,7 @@
 
         //表格分页查询等相关数据
         tableData: [],
-        schoolappraList:[],
+        schoolappraList: [],
         page: {
           currentPage: 1,//当前页码
           sizes: [2, 4, 6, 8, 10],
@@ -134,9 +135,9 @@
         dialogFormVisible: false,
         //定义表单数据
         form: {
-          termName:"",
-          flag:"",
-          schAppraId:"",
+          termName: "",
+          flag: "",
+          schAppraId: "",
         },
         formLabelWidth: "150px",
         deptList: [],
@@ -198,7 +199,7 @@
       addAppra: function () {
         this.$refs["schform"].validate((valid) => {
           if (valid) {
-            axios.get("/addAppra/"+this.form.schAppraId+"/"+this.form.termId).then(res => {
+            axios.get("/addAppra/" + this.form.schAppraId + "/" + this.form.termId).then(res => {
               if (res.data == "success") {
                 this.form = {};
                 this.dialogFormVisible = false;
@@ -258,7 +259,7 @@
           this.form = res.data
           this.dialogFormVisible = true;
         })
-          this.getSchAppra();
+        this.getSchAppra();
       },
 
       handleSelectionChange: function (val) {
@@ -319,8 +320,13 @@
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }
-  .el-button{
 
+  .el-button {
+
+  }
+
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1, #547BD8);
   }
 </style>
 

@@ -4,16 +4,16 @@
       <h2 align="center">学生信息</h2>
       <el-main>
         <div style="float: left ;padding: 5px 5px 5px 0px">
-          <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 150px" @change="clickTerm($event)" >
+          <el-select v-model="this.listQuery.termid" placeholder="请选择班期" style="width: 150px" @change="clickTerm($event)" clearable>
             <el-option v-for="dept in this.termList" :value="dept.term_id" :label="dept.term_name"></el-option>
           </el-select>
         </div>
 
         <div align="left"style="float: left ;padding: 5px 0px 5px 5px">
-          <el-input v-model="listQuery.filter" placeholder="请输入员工姓名" style="width: 200px"></el-input>
+          <el-input v-model="listQuery.filter" placeholder="请输入学生姓名" style="width: 200px"></el-input>
           <el-button type="primary" @click="queryStus">查询</el-button>
         </div>
-        <div align="right" style="float: right ;padding: 5px 0px 5px 5px">
+        <div align="right" style="float: right ;padding: 5px 0px 5px 5px" >
           <el-button type="primary" @click="showAdd">新增</el-button>
           <el-button type="primary" @click="delBatch">删除</el-button>
         </div>
@@ -33,13 +33,13 @@
             </el-form-item>
 
             <el-form-item label="所属班期" :label-width="formLabelWidth" prop="termid">
-              <el-select v-model="form.termid" placeholder="请选择所属部门" style="width: 350px" >
+              <el-select v-model="form.termid" placeholder="请选择所属班期" style="width: 350px" >
                 <el-option v-for="term in this.freeTerm" :value="term.term_id" :label="term.term_name"></el-option>
               </el-select>
             </el-form-item>
           </el-form>
 
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer" class="dialog-footer" align="center">
             <el-button @click="closeDlog">取 消</el-button>
             <el-button type="primary" @click="addEmp">确定</el-button>
             <!--            <el-button type="primary" @click="editEmp">确定修改</el-button>-->
@@ -104,8 +104,7 @@
         >
         </el-pagination>
       </el-main>
-
-      <el-footer>最终解释权归我所有</el-footer>
+      <el-footer class="el-aside">©金现代金桥工程第四十九期第四小组</el-footer>
     </el-container>
 
   </div>
@@ -124,10 +123,10 @@
         tableData: [],
         page: {
           currentPage: 1,//当前页码
-          sizes: [2, 4, 6, 8, 10],
+          sizes: [ 4, 6, 8, 10],
         },
         listQuery: {//初始查询条件
-          limit: 2,
+          limit: 4,
           page: 1,
           filter: "",
           termid:""
@@ -152,6 +151,7 @@
         rules: {
           stuname: [
             {required: true, message: '请输入学生姓名', trigger: 'blur'},
+            {pattern: /^[\u4e00-\u9fa5]{1,5}$/, message: '请输入汉字', trigger: 'blur'}
           ],
           sex: [
             {required: true, message: '请输入性别', trigger: 'blur'}
@@ -237,12 +237,12 @@
         this.$refs["empform"].validate((valid) => {
           if (valid) {
             axios.post("/addOrUpdStu", this.form).then(res => {
-              if (res.data == "success") {
+              if (res.data.count == "success") {
                 this.form = {};
                 this.dialogFormVisible = false;
                 this.getStus();
                 this.$message({
-                  message: this.dialogTitle + "成功",
+                  message: this.dialogTitle + "成功"+res.data.data,
                   type: "success"
                 })
               } else {
@@ -266,7 +266,7 @@
         })
         this.getBusyTerm();
         this.form = {};
-        this.dialogTitle = "新增员工";
+        this.dialogTitle = "新增学生";
         this.dialogFormVisible = true;
       },
       handleEdit: function (rowData) {
@@ -275,7 +275,7 @@
         })
         this.getBusyTerm();
         this.form = {};
-        this.dialogTitle = "编辑员工";
+        this.dialogTitle = "编辑学生";
         //根据员工编号获取员工详细信息，展示到对话框
         axios.get("/getStuById/" + rowData.stuid).then(res => {
 
@@ -403,5 +403,8 @@
 
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
   }
 </style>

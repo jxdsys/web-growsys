@@ -6,13 +6,12 @@
       </el-input>
       <el-button type="primary" @click="querys">查询</el-button>
     </div>
-    <div align="right" style="float: right">
+    <div align="right" style="float: right;text-align: right;width: 120px" >
       <el-input v-model="dept" :value="dept"
-                style="" readonly></el-input>
+                style="" readonly style="text-align: center" ></el-input>
     </div>
-    <div style="margin-top: 65px ;margin-bottom: 40px">
-      <el-dialog :title="FormTitle" :visible.sync="dialogFormVisible">
-
+    <div style="margin-top: 65px ;margin-bottom: 25px">
+      <el-dialog :title="FormTitle" :visible.sync="dialogFormVisible" >
         <div align="center" >
           <table border="=1" id="table1" :model="baseData">
             <tr>
@@ -22,7 +21,9 @@
               <td>{{this.baseData.sex}}</td>
               <td>名族</td>
               <td>{{this.baseData.people}}</td>
-              <td rowspan="4">{{this.baseData.pictureAdd}}</td>
+              <td rowspan="4" style="width: 100px">
+                <img v-if="baseData.pictureAdd" :src="require('../assets/img/' + baseData.pictureAdd)" class="avatar" width="100px" >
+                <img v-else src="../assets/logo.png" class="avatar" width="100px"></td>
             </tr>
             <tr>
               <td>出生日期</td>
@@ -60,7 +61,7 @@
           <el-form :model="form" ref="empForm" :rules="useInfoFormRules" >
             <table border="1" style="border: 1px solid" :model="baseData1" >
               <tr>
-                <td rowspan="2" style="height: 70px">项目</td>
+                <td rowspan="2" style="height: 30px">项目</td>
                 <td rowspan="2">员工部门</td>
                 <td rowspan="2">员工职务</td>
                 <td rowspan="2">评价人</td>
@@ -68,68 +69,62 @@
                 <td rowspan="2">整体评价分数</td>
               </tr>
               <tr>
-                <td>能力</td>
+                <td style="height: 20px">能力</td>
                 <td>积极性</td>
                 <td>沟通交流</td>
                 <td>人品</td>
                 <td>性格</td>
               </tr>
-              <tr>
-                <td >工作评分</td>
-                <td>{{this.baseData1.dname}}</td>
-                <td>{{this.baseData1.job}}</td>
-                <td>{{this.baseData1.dept_appra_name}}</td>
+              <tr style="line-height: 20px">
+                <td style="height: 30px ;padding-top: 12px" valign="top">工作评分</td>
+                <td valign="top" style="padding-top: 12px">{{this.baseData1.dname}}</td>
+                <td valign="top" style="padding-top: 12px">{{this.baseData1.job}}</td>
+                <td valign="top" style="padding-top: 12px">{{this.baseData1.dept_appra_name}}</td>
                 <td>
-                  <div style="margin-top: 20px"><el-form-item  prop="ability">
+                  <el-form-item  prop="ability">
                     <el-input v-model.number="form.ability" type="text" :readonly="readonly" class="paperview-input-text" />
-                  </el-form-item></div>
-
+                  </el-form-item>
                 </td>
                 <td>
-                  <div style="margin-top: 20px">
                   <el-form-item  prop="activity">
                     <el-input v-model.number="form.activity" type="text" :readonly="readonly" class="paperview-input-text" />
-                  </el-form-item></div>
+                  </el-form-item>
                 </td>
                 <td>
-                  <div style="margin-top: 20px">
+
                   <el-form-item  prop="communication">
                     <el-input v-model.number="form.communication" type="text" :readonly="readonly" class="paperview-input-text" />
-                  </el-form-item></div>
+                  </el-form-item>
 
                 </td>
                 <td>
-                  <div style="margin-top: 20px">
+
                   <el-form-item  prop="moralQuality">
                     <el-input v-model.number="form.moralQuality" type="text" :readonly="readonly" class="paperview-input-text" />
                   </el-form-item>
-                  </div>
+
                 </td>
                 <td>
-                  <div style="margin-top: 20px">
+
                   <el-form-item  prop="disposition">
                     <el-input v-model.number="form.disposition" type="text" :readonly="readonly" class="paperview-input-text" />
-                  </el-form-item></div>
+                  </el-form-item>
                 </td>
                 <td>
-                  <div style="margin-top: 20px">
+
                   <el-form-item  prop="score">
                     <el-input v-model.number="form.score" type="text" :readonly="readonly" class="paperview-input-text" />
                   </el-form-item>
-                  </div>
+
                 </td>
               </tr>
-              <tr style="height: 80px">
-                <td>评价(优点和缺点)</td>
+              <tr >
+                <td >评价(优缺点)</td>
                 <td colspan="9">
                   <el-form-item prop="estimated">
                     <el-input type="textarea"
                               placeholder="评价"
                               show-word-limit
-                              style="outline: none"
-                              height="100%"
-                              border="0"
-                              padding="0"
                               v-model="form.estimated"
                               :readonly="readonly"
                               class="paperview-input-textarea" />
@@ -141,15 +136,18 @@
                 </td>
               </tr>
             </table>
-            <el-button @click="closeDlog">取 消</el-button>
-            <el-button type="primary" @click="updateScore" :disabled="disabled5">保存</el-button>
+            <div style="margin-top: 10px">
+              <el-button @click="closeDlog">取 消</el-button>
+              <el-button type="primary" @click="updateScore" :disabled="disabled5">保存</el-button>
+            </div>
+
           </el-form>
         </div>
       </el-dialog>
       <el-table
         border
         :data="tableData"
-        height="420px"
+        height="385px"
         @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
@@ -180,7 +178,7 @@
         <el-table-column
           prop="natives"
           label="籍贯"
-          width="80"
+          width="70"
           align="center">
         </el-table-column>
         <el-table-column
@@ -228,47 +226,47 @@
         <el-table-column
           prop="apprascore"
           label="学校评价"
-          width="70"
+          width="60"
           align="center">
         </el-table-column>
         <el-table-column
           prop="score0"
           label="转正评价"
           align="center"
-          width="70"
+          width="60"
         >
         </el-table-column>
 
         <el-table-column
           prop="score1"
           label="一年评价"
-          width="70"
+          width="60"
           align="center">
         </el-table-column>
         <el-table-column
           prop="score2"
           label="两年评价"
-          width="70"
+          width="60"
           align="center">
         </el-table-column>
         <el-table-column
           prop="score3"
           label="三年评价"
-          width="70"
+          width="60"
           align="center">
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
-          width="120"
+          width="180"
           align="center">
           <template slot-scope="scope">
             <el-button type="text" v-if="scope.row.score3 !=0 && scope.row.score3 !=null" >已打分</el-button>
             <el-button type="text" v-if="scope.row.score3 ==null ||scope.row.score3==0"
                   class="el-button" @click="setMark(scope.row)">打分</el-button>
             <el-button type="text" @click="selectEmpInfo(scope.row) ">查看</el-button>
+            <el-button type="text" @click="revise(scope.row) ">修改</el-button>
           </template>
-        </el-table-column>
         </el-table-column>
       </el-table>
       <el-pagination
@@ -282,6 +280,7 @@
         @current-change="handleCurrentChange">
       </el-pagination>
     </div>
+    <el-footer class="el-aside" ><p style="line-height: 28px">©金现代金桥工程第四十九期第四小组</p></el-footer>
   </div>
 </template>
 
@@ -336,6 +335,8 @@
                 },
                 dept: "",
                 asd:"评分",
+                //修改评分标志
+                updateEmpScore:false,
                 readonly:false,
                 disabled1: true,
                 disabled2: true,
@@ -350,12 +351,13 @@
                 tableData: []
                 , page: {
                     currentPage: 1//当前页码
-                    , sizes: [4, 6, 8]
+                    , sizes: [3,4, 6, 8]
                 },
                 listQuery: {//初始查询条件
-                    limit: 4,
+                    limit:4,
                     page: 1,
                     filter: "",
+                    //登录用户的名字
                     userName: "",
                 },
                 //总条数
@@ -364,17 +366,26 @@
                 , pageCount: 0
                 //被选中评价人信息
                 , checkData: [],
+                //表单名字
                 FormTitle: "",
+                //表单页面状态
                 dialogFormVisible: false,
                 form: {
                     dateid: "",
                     stuid: "",
+                    //评价
                     estimated: "",
+                    //能力
                     ability: "",
+                    //积极性
                     activity: "",
+                    //沟通交流
                     communication: "",
+                    //renpin
                     moralQuality: "",
+                    //性格
                     disposition: "",
+                    //总评
                     score: ""
                 },
                 baseData: {
@@ -410,7 +421,9 @@
                     job: "",
                     dept_appra_name: ""
                 },
+                //路径
                 activeIndex: "",
+                //表单验证标志
                 useInfoFormRules:{},
 
                 useInfo:{
@@ -446,6 +459,12 @@
                     this.getDept();
                     this.tableData = res.data.data;
                     this.total = res.data.total;
+                    if(res.data.data==""){
+                        this.$message({
+                            message: "没有您需要评价的员工",
+                            type: "warning"
+                        });
+                    }
                 })
             },
 
@@ -492,87 +511,179 @@
                     }
                 })
             },
-            //查询员工分数信息
+            //打开查询界面；查询员工分数
             selectEmpInfo:function(rowData){
+                //清空表单验证提示信息
                 this.clearUseRules()
-                //this.$refs[empForm].resetFields();
+                //设置取消表单验证
                 this.useInfoFormRules={}
-                //this.useInfoFormRules=[]
+                this.form.dateid="";
+                //设置为只读
                 this.readonly=true;
+                //清空表单
                 this.form = {};
+                //清空学生id
                 this.form.stuid="";
-                this.FormTitle = rowData.stuname + "的成绩"
+                //设置表单名字
+                this.FormTitle = "查询"+rowData.stuname + "的成绩"
                 //获取员工个人的详细信息
                 axios.post("/getEmpInfoById", rowData.stuid).then(res => {
                     this.baseData = res.data
                 });
                 //获取评价人
-                axios.post("/getEmpDeptInfoById", rowData.stuid).then(res => {
+                axios.get("/getEmpDeptInfoById/"+rowData.stuid +"/"+this.listQuery.userName).then(res => {
                     this.baseData1 = res.data
                 })
+                //加载学生id
                 this.form.stuid = rowData.stuid;
                 sessionStorage.setItem("stuid",rowData.stuid)
+              if(rowData.score0 ==null ||rowData.score0==0){
+                this.$message({
+                  message: '员工目前还有没有参与过评分，成绩为空,不支持查看',
+                  type: 'warning'
+                });
+                //this.dialogFormVisible = true
+                //this.dialogFormVisible = false
+                return
+              }
+
+
+                //解开所有选项开禁用
                 this.disnoabledfun()
                 this.getScore(0)
+                //默认未第一个
                 this.activeIndex ="1";
                 this.dialogFormVisible = true
 
             }, //从后台获取分数信息
-            getScore:function(timeida){
+            getScore:function(timeid){
                 this.openform()
-                axios.get("/selectEmpScore/"+this.form.stuid+"/"+timeida).then(res => {
+                axios.get("/selectEmpScore/"+this.form.stuid+"/"+timeid).then(res => {
                     this.form = res.data
-                    this.form.moralQuality=res.data.moral_quality
-                    if(timeida==0){
-                        this.form.score =res.data.score0
-                        this.form.estimated=res.data.estimatedfirst
-                    }
-                    if(timeida==1){
-                        this.form.score =res.data.score1
-                        this.form.estimated=res.data.estimatedone
-                    }
-                    if(timeida==2){
-                        this.form.score =res.data.score2
-                        this.form.estimated=res.data.estimatedtwo
-                    }
-                    if(timeida==3){
-                        this.form.score =res.data.score3
-                        this.form.estimated=res.data.estimatedthird
-                    }
+                    // this.form.moralQuality=res.data.moral_quality
+                    // if(timeid==0){
+                    //     this.form.score =res.data.score0
+                    //     this.form.estimated=res.data.estimatedfirst
+                    // }
+                    // if(timeid==1){
+                    //     this.form.score =res.data.score1
+                    //     this.form.estimated=res.data.estimatedone
+                    // }
+                    // if(timeid==2){
+                    //     this.form.score =res.data.score2
+                    //     this.form.estimated=res.data.estimatedtwo
+                    // }
+                    // if(timeid==3){
+                    //     this.form.score =res.data.score3
+                    //     this.form.estimated=res.data.estimatedthird
+                    // }
                 })
             },
+            //打开修改界面
+            revise:function(rowData){
+                //代表是修改界面
+                this.updateEmpScore=true
+                //加载表单验证
+                this.useInfoFormRules=this.useInfo
+                //清空表单验证提示信息
+                this.clearUseRules()
+
+                //设置为只读
+                this.readonly=false;
+                //清空表单
+                this.form = {};
+                //清空学生id
+                this.form.stuid="";
+                this.form.dateid="";
+                //this.form.dateid=0;
+                //所有选项禁用
+                this.disabledfun();
+                //打开保存选项的非禁用
+                this.disabled5=false
+                this.form.dateid=0;
+                sessionStorage.setItem("dateid",this.form.dateid)
+                //设置表单名字
+                this.FormTitle = "修改"+rowData.stuname + "的成绩"
+                //获取员工个人的详细信息
+                axios.post("/getEmpInfoById", rowData.stuid).then(res => {
+                    this.baseData = res.data
+                });
+                //获取评价人
+                axios.get("/getEmpDeptInfoById/"+rowData.stuid +"/"+this.listQuery.userName).then(res => {
+                    this.baseData1 = res.data
+                })
+                //加载学生id
+                this.form.stuid = rowData.stuid;
+                sessionStorage.setItem("stuid",rowData.stuid)
+                //默认第一个
+                //判断分数情况，如果没有分数的选项卡直接禁用
+                //以总评为标志，总评有则直接可以修改，否则禁用
+                //初始时，做出查询，根据总表的数据情况进行判断
+                //是否再次在后台查询总表数据（？），该表没有地方可以修改，故比在查询
+                //如果没有转正评分，查询设置禁用或者提示
+                if(rowData.score0 == 0 || rowData.score0 == null){
+                    this.$message({
+                        message: '员工目前还有没有参与过评分，成绩为空',
+                        type: 'warning'
+                    });
+                    //this.dialogFormVisible = false
+                    return
+                    //只有转正成绩
+                }else if(rowData.score1 == 0 || rowData.score1 == null){
+                    this.disabled1=false;
+                  //有一年成绩
+                }else if(rowData.score2 == 0 || rowData.score2 == null){
+                    this.disabled1=false;
+                    this.disabled2=false;
+                    //有两年成绩
+                }else if(rowData.score3 == 0 || rowData.score3 == null){
+                    this.disabled1=false;
+                    this.disabled2=false;
+                    this.disabled3=false;
+                    //有三年成绩
+                }else {
+                    this.disnoabledfun()
+                    this.disabled5=false
+                }
+                this.getScore(0)
+                this.activeIndex ="1";
+                this.dialogFormVisible = true
+            },
+
+
             //打开评分页面
             setMark: function (rowData) {
-
+                //代表是打分操作
+                this.updateEmpScore =false
+                //加载表单验证
                 this.useInfoFormRules=this.useInfo
-                //this.useInfoFormRules= useInfoFormRules
+                this.form.dateid="";
+                //清除错误提示
                 this.clearUseRules()
+                //解开只读
                 this.readonly=false;
+                //清空表单
                 this.form = {};
+                //清空学生信息
                 this.form.stuid="";
-                //this.hiredate="";
-                //this.openform()
+                //设置所有选项禁用
                 this.disabledfun();
+                //设置表格数据为空
                 this.baseData={}
+                //表单名字
                 this.FormTitle = rowData.stuname + "的成绩"
                 //获取员工个人的详细信息
                 axios.post("/getEmpInfoById", rowData.stuid).then(res => {
                     this.baseData = res.data;
-                    //获取入职日期
-                    //this.hiredate = res.data.hiredate;
-                    //sessionStorage.setItem("hiredate",res.data.hiredate)
                 });
                 //获取评价人
-                axios.post("/getEmpDeptInfoById", rowData.stuid).then(res => {
+                axios.get("/getEmpDeptInfoById/"+rowData.stuid +"/"+this.listQuery.userName).then(res => {
                     this.baseData1 = res.data
                 });
                 this.form.stuid = rowData.stuid;
                 sessionStorage.setItem("stuid",rowData.stuid);
                 //查询成绩(判断是否需要评分)
                 //添加一个判断，事件间隔大于三个月才可以进行评分
-                //this.hiredate=this.baseData.hiredate
-                //alert(rowData.hiredate)
-                //this.hiredate=sessionStorage.getItem("hiredate");
                 //使用了上一次查出来的时间
                 this.curtime = new Date();
                 var empdate = new Date(rowData.hiredate);
@@ -658,94 +769,116 @@
             updateScore: function () {
                 this.$refs["empForm"].validate((valid) => {
                     if (valid) {
-                        //alert('submit!');
+                        if(this.updateEmpScore){
+                           //保存修改后的评分
+                            //怎么给dataid 和stuid赋值
+                            this.getAllEmpInfo()
+                            this.form.stuid=sessionStorage.getItem("stuid")
+                            this.form.dateid=sessionStorage.getItem("dateid")
+                            axios.post("/updateScore",this.form).then(res =>{
+                                if(res.data =="success"){
+                                    this.$message({
+                                        message: "修改成功",
+                                        type: "success"
+                                    });
+                                }else{
+                                    this.$message({
+                                        message: "失败",
+                                        type: "warning"
+                                    });
+                                }
+                            })
+                        }else {
+                            //保存评分
+                            axios.post("/updateScore", this.form).then(res => {
+                                if (res.data == "success") {
+                                    this.getAllEmpInfo()
+                                    if (this.form.dateid == 0) {
+                                        this.disabled1 = true;
+                                        if(this.num<365){
+                                            this.$message({
+                                                message: "转正评价成功，一年评价还无法进行",
+                                                type: "success"
+                                            });
+                                            this.dialogFormVisible = false
+                                        }else{
+                                            this.disabled2 = false;
+                                            this.openform()
+                                            this.form.dateid =1;
+                                            this.activeIndex ="2";
+                                            this.$message({
+                                                message: "转正评价成功",
+                                                type: "success"
+                                            });
+                                        }
+                                    }else if (this.form.dateid == 1) {
+                                        this.disabled2 = true;
+                                        if(this.num<730){
+                                            this.$message({
+                                                message: "一年评价成功，两年评价还无法进行",
+                                                type: "success"
+                                            });
+                                            this.dialogFormVisible = false
+                                        }else{
+                                            this.disabled3 = false;
+                                            this.openform()
+                                            this.form.dateid =2;
+                                            this.activeIndex ="3";
+                                            this.$message({
+                                                message: "一年评价成功",
+                                                type: "success"
+                                            });
+                                        }
+                                    }else if (this.form.dateid == 2) {
+                                        this.disabled3 = true;
+                                        if(this.num<1095){
+                                            this.$message({
+                                                message: "两年评价成功，三年评价还无法进行",
+                                                type: "success"
+                                            });
+                                            this.dialogFormVisible = false
+                                        }else{
+                                            this.disabled4 = false;
+                                            this.openform()
+                                            this.form.dateid =3;
+                                            this.activeIndex ="4";
+                                            this.$message({
+                                                message: "两年评价成功",
+                                                type: "success"
+                                            });
+                                        }
 
-                axios.post("/updateScore", this.form).then(res => {
-                    if (res.data == "success") {
-                        this.getAllEmpInfo()
-                        if (this.form.dateid == 0) {
-                            this.disabled1 = true;
-                            if(this.num<365){
-                                this.$message({
-                                    message: "转正评价成功，一年评价还无法进行",
-                                    type: "success"
-                                });
-                                this.dialogFormVisible = false
-                            }else{
-                                this.disabled2 = false;
-                                this.openform()
-                                this.form.dateid =1;
-                                this.activeIndex ="2";
-                                this.$message({
-                                    message: "转正评价成功",
-                                    type: "success"
-                                });
-                            }
-                        }else if (this.form.dateid == 1) {
-                            this.disabled2 = true;
-                            if(this.num<730){
-                                this.$message({
-                                    message: "一年评价成功，两年评价还无法进行",
-                                    type: "success"
-                                });
-                                this.dialogFormVisible = false
-                            }else{
-                                this.disabled3 = false;
-                                this.openform()
-                                this.form.dateid =2;
-                                this.activeIndex ="3";
-                                this.$message({
-                                    message: "一年评价成功",
-                                    type: "success"
-                                });
-                            }
-                        }else if (this.form.dateid == 2) {
-                            this.disabled3 = true;
-                            if(this.num<1095){
-                                this.$message({
-                                    message: "两年评价成功，三年评价还无法进行",
-                                    type: "success"
-                                });
-                                this.dialogFormVisible = false
-                            }else{
-                                this.disabled4 = false;
-                                this.openform()
-                                this.form.dateid =3;
-                                this.activeIndex ="4";
-                                this.$message({
-                                    message: "两年评价成功",
-                                    type: "success"
-                                });
-                            }
-
-                        }else if (this.form.dateid == 3) {
-                            this.disabled4 = true;
-                            this.form={}
-                            this.dialogFormVisible = false
-                            this.$message({
-                                message: "三年评价成功",
-                                type: "success"
-                            });
+                                    }else if (this.form.dateid == 3) {
+                                        this.disabled4 = true;
+                                        this.form={}
+                                        this.dialogFormVisible = false
+                                        this.$message({
+                                            message: "三年评价成功",
+                                            type: "success"
+                                        });
+                                    }
+                                } else {
+                                    this.form = {}
+                                    //this.form.stuid =sessionStorage.getItem("stuid");
+                                    this.$message({
+                                        message: "失败",
+                                        type: "warning"
+                                    });
+                                }
+                            })
                         }
-                    } else {
-                        this.form = {}
-                        //this.form.stuid =sessionStorage.getItem("stuid");
-                        this.$message({
-                            message: "失败",
-                            type: "warning"
-                        });
-                    }
-                })
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
             },
+
             //跳转到转正评价（也是默认的界面）
             toMark1:function(){
                 this.openform()
                 this.form.dateid =0;
+                sessionStorage.setItem("dateid",this.form.dateid)
                 this.getScore(0)
                 this.activeIndex ="1";
             },
@@ -753,6 +886,7 @@
             toMark2:function(){
                 this.openform()
                 this.form.dateid =1;
+                sessionStorage.setItem("dateid",this.form.dateid)
                 this.getScore(1)
                 this.activeIndex ="2";
 
@@ -761,6 +895,7 @@
             toMark3:function(){
                 this.openform()
                 this.form.dateid =2;
+                sessionStorage.setItem("dateid",this.form.dateid)
                 this.getScore(2)
                 this.activeIndex ="3";
 
@@ -769,6 +904,7 @@
             toMark4:function(){
                 this.openform()
                 this.form.dateid =3;
+                sessionStorage.setItem("dateid",this.form.dateid)
                 this.getScore(3)
                 this.activeIndex ="4";
             },
@@ -796,7 +932,7 @@
                 var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
                 return year+"-"+month+"-"+day;
             },
-            //清空表单眼影提示语句
+            //清空表单提示语句
             clearUseRules:function () {
                 this.$nextTick(() => {
                     this.$refs["empForm"].clearValidate()
@@ -830,15 +966,16 @@
   #table1 {
     text-align: center;
     border-collapse: collapse;
-    height: 150px;
+    height: 140px;
     width: 100%;
+
   }
 
   table {
     text-align: center;
     border-collapse: collapse;
     width: 100%;
-    height: 150px;
+    height: 120px;
   }
 
   input {
@@ -861,10 +998,11 @@
     background-image: none;
     border-radius: 4px;
     /*padding: 1%;*/
+    text-align: center;
 
     border: 0px;
     width: 70px;
-    height:40px;
+    height:30px;
   }
   .paperview-input-textarea >>> .el-textarea__inner {
     -webkit-appearance: none;
@@ -874,6 +1012,9 @@
     outline: none;
     border: 0px;
     width: 100%;
+  }
+  .el-footer {
+    background-image: linear-gradient(to bottom, #547BD8 , #BDC8FF);
   }
 
 

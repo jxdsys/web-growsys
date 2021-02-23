@@ -124,7 +124,7 @@
 
   </el-dialog>
 
-<div style="float: left;padding: 0px 80px 0px 80px;" >
+<div style="float: left;padding: 0px 20px 0px 20px;" >
 
     <p style="font-size: 22px ;font-weight: bold" >我的信息</p>
 
@@ -144,8 +144,8 @@
         <td class="width0dd ">民族</td>
         <td class="widthcomplex">{{TableStu.people}}</td>
         <td rowspan="4">
-          <img v-if="form.pictureAdd" :src="require('../assets/img/' + form.pictureAdd)" class="avatar" width="140px" height="220px">
-          <img v-else src="../assets/logo.png" class="avatar" width="140px" height="220px">
+          <img v-if="form.pictureAdd" :src="require('../assets/img/' + form.pictureAdd)" class="avatar" width="160px" height="220px">
+          <img v-else src="../assets/logo.png" class="avatar" width="160px" height="220px">
         </td>
       </tr>
       <tr>
@@ -178,6 +178,8 @@
         <td colspan="6" >{{TableStu.content}}</td>
       </tr>
     </table>
+  <el-footer class="el-aside" style="margin-top: 70px;" ><p style="line-height: 28px">©金现代金桥工程第四十九期第四小组</p></el-footer>
+
 </div>
   </div>
 </template>
@@ -228,6 +230,7 @@
             isyes:false,
             TableStu:[],
             formwidth:'50px',
+              photo:"",
             rules:{
               birthday: [
                 { required: true, message: '请选择日期', trigger: 'blur' },
@@ -235,6 +238,7 @@
               ],
               natives:[
                 {required: true, message: '请输入籍贯', trigger: 'blur'},
+                {pattern: /^[\u4e00-\u9fa5]{1,5}$/, message: '请输入汉字', trigger: 'blur'},
                 { min: 3, message: '长度大于3', trigger: 'blur' }
               ],
               sex: [
@@ -245,10 +249,12 @@
               ],
               people:[
                 {required: true, message: '请输入民族', trigger: 'blur'},
+                {pattern: /^[\u4e00-\u9fa5]{1,5}$/, message: '请输入汉字', trigger: 'blur'}
+
               ],
               tel:[
-                {required: true, message: '请输入联系电话', trigger: 'blur'},
-                { pattern:'^1[3|4|5|7|8][0-9]{9}$',message: '电话号码不正确' ,trigger:'blur'}
+                  {required: true, message: '请填写11位手机号', trigger: 'blur'},
+                  {pattern:/^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/, message: '手机号格式错误', trigger: 'blur'}
               ],
               cardid:[
                 {required: true, message: '请输入身份证号', trigger: 'blur'},
@@ -256,10 +262,13 @@
               ],
               school:[
                 {required: true, message: '请输入毕业学校', trigger: 'blur'},
+                {pattern: /^[\u4e00-\u9fa5]{1,5}$/, message: '请输入汉字', trigger: 'blur'},
                 {min: 3,max:15, message: '长度大于3', trigger: 'blur' }
               ],
               profession:[
                 {required: true, message: '请输入专业', trigger: 'blur'},
+                {pattern: /^[\u4e00-\u9fa5]{1,5}$/, message: '请输入汉字', trigger: 'blur'},
+
               ],
               imageUrl:[{
                 required: true,
@@ -339,7 +348,6 @@
           })
             this.dialogFormVisible = true;
             this.isUpdStu();
-
         },
         getdatatime(){//默认显示今天
           this.curtime= new Date();
@@ -377,11 +385,11 @@
     height: 70px;
   }
   .widthcomplex{
-    width: 180px;
+    width: 240px;
     height: 70px;
   }
   img{
-    width: 100px;
+    width: 130px;
     height: 100px;
   }
   input{
@@ -400,5 +408,8 @@
     height: 178px;
     display: block;
   }
+  .el-footer {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
 
+  }
 </style>

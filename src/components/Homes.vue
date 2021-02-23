@@ -2,17 +2,19 @@
   <div>
     <el-container class="home-container">
       <el-header>
-        <div>
-          <span>金桥学员成长跟踪系统({{userName}})</span>
+        <div style="float: left">
+          <span>金桥学员成长跟踪系统({{loginName}})</span>
         </div>
-
+        <div style="float: right">
+          <span>用户名：{{userName}}</span>
+        </div>
       </el-header>
       <el-container>
         <el-aside :width="isCollapse ? '64px' : '200px'">
-          <!--导航显示-->
-          <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff"
+<!--          &lt;!&ndash;导航显示&ndash;&gt;background-color="#E8ECD5"-->
+          <el-menu  class="el-aside" text-color="#fff" active-text-color="black"
                    unique-opened :router="true" :collapse="isCollapse" :collapse-transition="false"
-          :default-active="activePath">
+          :default-active="activePath" >
               <el-menu-item :index="menu.path" v-for="menu in menuList" :key="menu.id"
                            @click="saveNavState(menu.path)">
                 <template slot="title">
@@ -26,6 +28,7 @@
           <router-view></router-view>
         </el-main>
       </el-container>
+
     </el-container>
   </div>
 </template>
@@ -39,7 +42,8 @@
         userName:sessionStorage.getItem("userName"),
         isCollapse:false,
         activePath:"/welcome",
-        role:sessionStorage.getItem("role")
+        role:sessionStorage.getItem("role"),
+          loginName:""
       }
     },
     methods: {
@@ -53,6 +57,11 @@
           }
         })
       },
+        isLogin: function () {
+            if (sessionStorage.getItem("userName") == null) {
+                this.$router.replace({path: '/'})
+            }
+        },
       saveNavState:function (activePath) {
            // this.activePath = activePath;
            if(activePath =="/exit"){
@@ -60,7 +69,9 @@
                    confirmButtonText: '确定',
                    cancelButtonText: '取消',
                    type: 'warning'
-               }).then(() => {//确定
+               }).then(() => {//确定\
+                   //this.activePath=""
+                 sessionStorage.clear()
                    this.$router.push({
                        path: '/'
                    });
@@ -75,10 +86,23 @@
                this.activePath = activePath;
            }
            sessionStorage.setItem('activePath',this.activePath)
-        }
+        },
+      getUsername:function() {
+          if (this.role == 0) {
+              this.loginName = "管理员"
+          } else if (this.role == 1) {
+              this.loginName = "学生"
+          } else if (this.role == 2) {
+              this.loginName = "老师"
+          } else if (this.role == 3) {
+              this.loginName = "部门评价人"
+          }
+      }
     },
     created() {
+      this.isLogin()
       this.getMenuList();
+      this.getUsername()
       this.activePath = sessionStorage.getItem("activePath")
     }
   }
@@ -88,8 +112,9 @@
     height: 630px;
   }
   .el-header {
-    background-color: #373d41;
-    background-color: #373d41;
+    /*background-color: #3E89EE;*/
+    background-image: linear-gradient(to bottom, #547BD8 , #BDC8FF);
+    /*background-color: #373d41;*/
     display: flex;
     justify-content: space-between;
     padding-left: 0%;
@@ -99,7 +124,7 @@
   }
 
   .el-aside {
-    background-color: #333744;
+    background-image: linear-gradient(to bottom, #547BD8 , #BDC8FF);
   }
 
   .el-aside el-menu {
@@ -108,6 +133,7 @@
 
   .el-main {
     background-color: #eaedf1;
+
   }
 
   .el-header div {

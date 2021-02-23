@@ -15,7 +15,13 @@
            <el-form :model="form"  :rules="rules" ref="deptAppraForm">
 
              <el-form-item label="部门评价人姓名" :label-width="formLabelWidth" prop="deptAppraName">
-               <el-input v-model="form.deptAppraName" autocomplete="off" style="width: 400px"></el-input>
+               <el-input v-model="form.deptAppraName" autocomplete="off" style="width: 400px" :disabled="disabled"></el-input>
+             </el-form-item>
+
+             <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptid">
+               <el-select v-model="form.deptid" placeholder="请选择部门" style="width: 400px"  :disabled="disabled">
+                 <el-option v-for="dept in this.deptList" :value="dept.deptid" :label="dept.dname"></el-option>
+               </el-select>
              </el-form-item>
 
              <el-form-item label="职务" :label-width="formLabelWidth" prop="jobid">
@@ -24,11 +30,7 @@
                </el-select>
              </el-form-item>
 
-             <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptid">
-               <el-select v-model="form.deptid" placeholder="请选择部门" style="width: 400px">
-                 <el-option v-for="dept in this.deptList" :value="dept.deptid" :label="dept.dname"></el-option>
-               </el-select>
-             </el-form-item>
+
 
            </el-form>
            <div slot="footer" class="dialog-footer" align="center">
@@ -39,7 +41,7 @@
         <el-table
           border
           :data="tableData"
-          height="460px"
+          height="375px"
           @selection-change="handleSelectionChange">
           <el-table-column
             type="selection"
@@ -90,6 +92,7 @@
            @current-change="handleCurrentChange">
          </el-pagination>
       </div>
+      <el-footer class="el-aside" style="margin-top: 30px">©金现代金桥工程第四十九期第四小组</el-footer>
     </div>
 </template>
 
@@ -109,6 +112,7 @@
                     page: 1,
                     filter:""
                 },
+                disabled:false,
                 //总条数
                 total:0
                 //总页数
@@ -132,7 +136,8 @@
                 jobList:[],
                 rules:{
                     deptAppraName:[
-                        {required: true, message: '请输入评价人姓名', trigger: 'blur'}
+                        {required: true, message: '请输入评价人姓名', trigger: 'blur'},
+                      {pattern: /^[\u4e00-\u9fa5]{1,5}$/, message: '请输入汉字', trigger: 'blur'}
                     ] ,
                     jobid:[
                         {required: true, message: '请选择职务', trigger: 'blur'}
@@ -197,6 +202,7 @@
             //打开新增页面
             selectAdd:function () {
                 this.isadd =true
+                this.disabled =false
                 this.dialogTitle ="新增部门评价人";
                 this.form={};
                 this.dialogFormVisible =true;
@@ -206,6 +212,7 @@
             handleEdit:function (rowData) {
                 this.dialogTitle="编辑部门评价人";
                 this.isadd = false;
+                this.disabled =true
                 //根据员工编号获取信息
                 axios.get("/getDeptAppraById/"+rowData.dept_appraid).then(res =>{
                     this.form = res.data;
@@ -326,5 +333,8 @@
 </script>
 
 <style scoped>
-
+  .el-aside {
+    background-image: linear-gradient(to bottom, #EAEDF1,#547BD8);
+    line-height: 60px;
+  }
 </style>
